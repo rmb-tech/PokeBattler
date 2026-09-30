@@ -7,6 +7,7 @@ import se.rmbtech.pokebattler.service.PokedexService;
 import se.rmbtech.pokebattler.model.Attack;
 import se.rmbtech.pokebattler.model.Pokemon;
 import se.rmbtech.pokebattler.model.PokemonType;
+import se.rmbtech.pokebattler.service.PokemonDataSeeder;
 import se.rmbtech.pokebattler.util.InputHelper;
 import se.rmbtech.pokebattler.util.UIHelper;
 
@@ -31,27 +32,17 @@ public class PokedexUI {
         UIHelper.printPikachuArt();
 
         while (running) {
-            UIHelper.printMenu();
+            UIHelper.printMainMenu();
             int choice = InputHelper.readInt(scanner, "Val: ", 1, 8);
 
             try {
                 switch (choice) {
-                    case 1 -> listPokemons();
-                    case 2 -> addPokemon();
-                    case 3 -> editPokemon();
-                    case 4 -> removePokemon();
-                    case 5 -> searchPokemon();
+                    case 1 -> pokedexSubMenu();
+                    case 2 -> catchRandomPokemon();
+                    case 3 -> battleUI.startBattleMenu();
+                    case 4 -> resetToDefaultData();
+                    case 5 -> saveToFile();
                     case 6 -> {
-                        manager.seedDefaultData();
-                        FileManager.savePokemons(manager.getPokemons());
-                        System.out.println("Pokédex återställt till standard-Pokémon!");
-                    }
-                    case 7 -> {
-                        FileManager.savePokemons(manager.getPokemons());
-                        System.out.println("Data sparad till fil.");
-                    }
-                    case 8 -> battleUI.startBattle();
-                    case 9 -> {
                         FileManager.savePokemons(manager.getPokemons());
                         System.out.println("Sparar och avslutar...");
                         running = false;
@@ -65,7 +56,47 @@ public class PokedexUI {
 
         scanner.close();
     }
+    private void pokedexSubMenu() {
+        boolean inSubMenu = true;
+        while (inSubMenu) {
+            UIHelper.printPokedexSubMenu();
+            int subChoice = InputHelper.readInt(scanner, "Val: ", 1, 7);
 
+            switch (subChoice) {
+                case 1 -> listPokemons();
+                case 2 -> addPokemon();
+                case 3 -> editPokemon();
+                case 4 -> removePokemon();
+                case 5 -> searchPokemon();
+                case 6 -> healAllPokemons();
+                case 7 -> inSubMenu = false;
+            }
+        }
+    }
+    private void catchRandomPokemon() {
+        Pokemon newPokemon = PokemonDataSeeder.getRandomSeedPokemon();
+        manager.addPokemon(newPokemon);
+        FileManager.savePokemons(manager.getPokemons());
+        System.out.println("\n🎉 GRATTIS! Du fångade en vild " + newPokemon.getName() + " (" + newPokemon.getType() + ")!");
+    }
+
+    private void healAllPokemons() {
+        for (Pokemon p : manager.getPokemons()) {
+            p.setCurrentHp(p.getMaxHp());
+        }
+        FileManager.savePokemons(manager.getPokemons());
+        System.out.println("\n💖 Alla dina Pokémon har blivit fullständigt läkta!");
+    }
+    private void resetToDefaultData() {
+        manager.seedDefaultData();
+        FileManager.savePokemons(manager.getPokemons());
+        System.out.println("✅ Pokédex återställt till seedat läge!");
+    }
+
+    private void saveToFile() {
+        FileManager.savePokemons(manager.getPokemons());
+        System.out.println("✅ Data sparad till fil.");
+    }
     private void listPokemons() {
         List<Pokemon> list = manager.getPokemons();
         if (list.isEmpty()) {

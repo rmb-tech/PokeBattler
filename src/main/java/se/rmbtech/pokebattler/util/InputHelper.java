@@ -10,13 +10,13 @@ public class InputHelper {
             String input = scanner.nextLine().trim();
 
             if (input.isEmpty()) {
-                System.out.println("⚠ Ogiltig input.. Skriv ett heltal");
+                System.out.println("❗Ogiltig input.. Skriv ett heltal");
                 continue;
             }
             try {
                 return Integer.parseInt(input.trim());
             } catch (NumberFormatException e) {
-                System.out.println("⚠ Ogiltig input. Skriv ett heltal");
+                System.out.println("❗Ogiltig input. Skriv ett heltal");
             }
         }
     }
@@ -27,7 +27,7 @@ public class InputHelper {
             if (value >= min && value <= max) {
                 return value;
             }
-            System.out.printf("⚠️ Värdet måste vara mellan %d och %d.%n", min, max);
+            System.out.printf("️❗Värdet måste vara mellan %d och %d.%n", min, max);
         }
     }
 
@@ -39,7 +39,7 @@ public class InputHelper {
             if (!input.isEmpty()) {
                 return input;
             }
-            System.out.println("⚠️ Input får inte vara tom. Försök igen.");
+            System.out.println("❗Input får inte vara tom. Försök igen.");
         }
     }
 }

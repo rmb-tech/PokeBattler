@@ -37,7 +37,7 @@ public class PokedexService {
     }
 
     public void seedDefaultData() {
-        List<Pokemon> masterList = PokemonDataSeeder.getDefaultPokemon();
+        List<Pokemon> masterList = PokemonDataSeeder.getSeedPokemon();
 
         Collections.shuffle(masterList);
         this.pokemons = new ArrayList<>(masterList.subList(0, 6));

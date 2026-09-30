@@ -3,33 +3,40 @@ package se.rmbtech.pokebattler.util;
 public class UIHelper {
 
     public static void printFirsStartHeader() {
-        System.out.println("=============================================================================");
-        System.out.println("                           VÄLKOMMEN TILL POKÉDEX                            ");
-        System.out.println("=============================================================================");
+        System.out.println("===============================================================================");
+        System.out.println("                            VÄLKOMMEN TILL POKÉDEX                             ");
+        System.out.println("===============================================================================");
     }
 
     public static void printHeader() {
-        System.out.println("=============================================================================");
-        System.out.println("                                   POKÉDEX                                   ");
-        System.out.println("=============================================================================");
+        System.out.println("===============================================================================");
+        System.out.println("                                    POKÉDEX                                    ");
+        System.out.println("===============================================================================");
     }
 
     public static void printDivider() {
-        System.out.println("-----------------------------------------------------------------------------");
+        System.out.println("-------------------------------------------------------------------------------");
     }
 
-    public static void printMenu() {
-        printDivider();
-        System.out.println("1) Visa alla Pokémons");
-        System.out.println("2) Lägg till ny Pokémon");
-        System.out.println("3) Redigera Pokémon");
-        System.out.println("4) Ta bort Pokémon");
-        System.out.println("5) Sök Pokémon");
-        System.out.println("6) Återställ till seedat läge (6 slumpade)");
-        System.out.println("7) Spara till fil");
-        System.out.println("8. ⚔️ Starta Strid");
-        System.out.println("9) Avsluta");
-        printDivider();
+    public static void printMainMenu() {
+        System.out.println("\n=== HUVUDMENY ===");
+        System.out.println("1. 📖 Pokédex");
+        System.out.println("2. 🎯 Fånga ny slumpad Pokémon");
+        System.out.println("3. ⚔️ Starta Strid");
+        System.out.println("4. 🔄 Återställ till seedat läge");
+        System.out.println("5. 💾 Spara till fil");
+        System.out.println("6. 🚪 Avsluta");
+    }
+
+    public static void printPokedexSubMenu() {
+        System.out.println("\n--- POKÉDEX MENY ---");
+        System.out.println("1) 📋 Visa alla Pokémons");
+        System.out.println("2) ➕ Lägg till ny Pokémon");
+        System.out.println("3) ✏️ Redigera Pokémon");
+        System.out.println("4) 🗑️ Ta bort Pokémon");
+        System.out.println("5) 🔍 Sök Pokémon");
+        System.out.println("6) 💖 Läk alla Pokémons (Full HP)");
+        System.out.println("7) ⬅️ Tillbaka till huvudmenyn");
     }
 
     public static void simulateLoading(String message, int milliseconds) {
