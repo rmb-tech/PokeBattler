@@ -1,4 +1,4 @@
-package se.rmbtech.pokebattler.manager;
+package se.rmbtech.pokebattler.service;
 
 import se.rmbtech.pokebattler.exception.PokemonNotFoundException;
 import se.rmbtech.pokebattler.model.Attack;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PokedexManager {
+public class PokedexService {
     private List<Pokemon> pokemons = new ArrayList<>();
 
     public List<Pokemon> getPokemons() {

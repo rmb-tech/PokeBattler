@@ -57,6 +57,12 @@ public class Pokemon {
         this.currentHp = maxHp;
     }
 
+    public void setCurrentHp(int currentHp) {
+        if (currentHp < 0) {
+            this.currentHp = 0;
+        } else this.currentHp = Math.min(currentHp, this.maxHp);
+    }
+
     public void setDefense(int defense) {
         if (defense < 0 || defense > 100) {
             throw new InvalidPokemonException("Försvar (Defense) måste vara mellan 0 och 100.");
@@ -95,6 +101,19 @@ public class Pokemon {
         return new ArrayList<>(attacks);
     }
 
+    public void takeDamage(int damage) {
+        if (damage <= 0) return;
+        this.currentHp = Math.max(0, this.currentHp - damage);
+    }
+
+    public boolean isFainted() {
+        return this.currentHp <= 0;
+    }
+
+    public void healFull() {
+        this.currentHp = this.maxHp;
+    }
+
     public void addAttack(Attack attack) {
         if (attack == null) {
             throw new InvalidPokemonException("Attacken kan inte vara null.");
@@ -107,7 +126,6 @@ public class Pokemon {
 
     @Override
     public String toString() {
-        return String.format("%s [%s] - HP: %d/%d | Defense: %d | Attacker: %d/4",
-                name, type, currentHp, maxHp, defense, attacks.size());
+        return String.format("%s [%s] - HP: %d/%d | Defense: %d | Attacker: %d/4", name, type, currentHp, maxHp, defense, attacks.size());
     }
 }

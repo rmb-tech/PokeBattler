@@ -2,8 +2,8 @@ package se.rmbtech.pokebattler.ui;
 
 import se.rmbtech.pokebattler.exception.InvalidPokemonException;
 import se.rmbtech.pokebattler.exception.PokemonNotFoundException;
-import se.rmbtech.pokebattler.manager.FileManager;
-import se.rmbtech.pokebattler.manager.PokedexManager;
+import se.rmbtech.pokebattler.repository.FileManager;
+import se.rmbtech.pokebattler.service.PokedexService;
 import se.rmbtech.pokebattler.model.Attack;
 import se.rmbtech.pokebattler.model.Pokemon;
 import se.rmbtech.pokebattler.model.PokemonType;
@@ -16,9 +16,9 @@ import java.util.Scanner;
 
 public class PokedexUI {
     private final Scanner scanner;
-    private final PokedexManager manager;
+    private final PokedexService manager;
 
-    public PokedexUI(PokedexManager manager) {
+    public PokedexUI(PokedexService manager) {
         this.scanner = new Scanner(System.in);
         this.manager = manager;
     }

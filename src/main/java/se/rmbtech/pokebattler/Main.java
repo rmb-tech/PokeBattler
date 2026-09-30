@@ -1,7 +1,7 @@
 package se.rmbtech.pokebattler;
 
-import se.rmbtech.pokebattler.manager.FileManager;
-import se.rmbtech.pokebattler.manager.PokedexManager;
+import se.rmbtech.pokebattler.repository.FileManager;
+import se.rmbtech.pokebattler.service.PokedexService;
 import se.rmbtech.pokebattler.model.Pokemon;
 import se.rmbtech.pokebattler.ui.PokedexUI;
 import se.rmbtech.pokebattler.util.UIHelper;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        PokedexManager manager = new PokedexManager();
+        PokedexService manager = new PokedexService();
 
         List<Pokemon> loadedData = FileManager.loadPokemons();
 

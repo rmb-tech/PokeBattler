@@ -1,4 +1,4 @@
-package se.rmbtech.pokebattler.manager;
+package se.rmbtech.pokebattler.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

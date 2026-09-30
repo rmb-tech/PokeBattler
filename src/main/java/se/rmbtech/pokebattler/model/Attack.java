@@ -19,7 +19,7 @@ public class Attack {
         setName(name);
         setBaseDamage(baseDamage);
         setAccuracy(accuracy);
-        this.type = type;
+        setType(type);
     }
 
     public void setName(String name) {
@@ -31,7 +31,7 @@ public class Attack {
 
     public void setType(PokemonType type) {
         if (type == null) {
-            throw new InvalidPokemonException("Attacktypen får inte vara tomt.");
+            throw new InvalidPokemonException("Attacktypen får inte vara tom.");
         }
         this.type = type;
     }
