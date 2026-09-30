@@ -17,10 +17,12 @@ import java.util.Scanner;
 public class PokedexUI {
     private final Scanner scanner;
     private final PokedexService manager;
+    private final BattleUI battleUI;
 
     public PokedexUI(PokedexService manager) {
         this.scanner = new Scanner(System.in);
         this.manager = manager;
+        this.battleUI = new BattleUI(this.scanner, manager);
     }
 
     public void start() {
@@ -48,7 +50,8 @@ public class PokedexUI {
                         FileManager.savePokemons(manager.getPokemons());
                         System.out.println("Data sparad till fil.");
                     }
-                    case 8 -> {
+                    case 8 -> battleUI.startBattle();
+                    case 9 -> {
                         FileManager.savePokemons(manager.getPokemons());
                         System.out.println("Sparar och avslutar...");
                         running = false;

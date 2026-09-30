@@ -27,7 +27,8 @@ public class UIHelper {
         System.out.println("5) Sök Pokémon");
         System.out.println("6) Återställ till seedat läge (6 slumpade)");
         System.out.println("7) Spara till fil");
-        System.out.println("8) Avsluta");
+        System.out.println("8. ⚔️ Starta Strid");
+        System.out.println("9) Avsluta");
         printDivider();
     }
 
