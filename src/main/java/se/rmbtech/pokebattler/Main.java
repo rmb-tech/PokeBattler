@@ -26,6 +26,5 @@ public class Main {
         }
         PokedexUI ui = new PokedexUI(manager);
         ui.start();
-
     }
 }
