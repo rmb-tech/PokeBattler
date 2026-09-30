@@ -13,6 +13,7 @@ public class Pokemon {
     private String name;
     private int maxHp;
     private int defense;
+    private int speed;
 
     @JsonProperty("type")
     private PokemonType type;
@@ -26,11 +27,12 @@ public class Pokemon {
         this.attacks = new ArrayList<>();
     } // Krävs för Jackson (JSON)
 
-    public Pokemon(String name, PokemonType type, int maxHp, int defense, List<Attack> attacks) {
+    public Pokemon(String name, PokemonType type, int maxHp, int defense, int speed, List<Attack> attacks) {
         setName(name);
         setType(type);
         setMaxHp(maxHp);
         setDefense(defense);
+        setSpeed(speed);
         this.currentHp = maxHp;
         setAttacks(attacks);
     }
@@ -70,6 +72,13 @@ public class Pokemon {
         this.defense = defense;
     }
 
+    public void setSpeed(int speed){
+        if (speed < 1 || speed > 300){
+            throw new InvalidPokemonException("Snabbhet (Speed) måste vara mellan 1 och 300.");
+        }
+        this.speed = speed;
+    }
+
     public void setAttacks(List<Attack> attacks) {
         if (attacks == null || attacks.isEmpty() || attacks.size() > 4) {
             throw new InvalidPokemonException("En Pokémon måste ha mellan 1 och 4 attacker.");
@@ -95,6 +104,10 @@ public class Pokemon {
 
     public int getDefense() {
         return defense;
+    }
+
+    public int getSpeed(){
+        return speed;
     }
 
     public List<Attack> getAttacks() {
@@ -126,6 +139,6 @@ public class Pokemon {
 
     @Override
     public String toString() {
-        return String.format("%s [%s] - HP: %d/%d | Defense: %d | Attacker: %d/4", name, type, currentHp, maxHp, defense, attacks.size());
+        return String.format("%s [%s] - HP: %d/%d | Försvar: %d | Snabbhet: %d | Attacker: %d/4", name, type, currentHp, maxHp, defense, speed, attacks.size());
     }
 }

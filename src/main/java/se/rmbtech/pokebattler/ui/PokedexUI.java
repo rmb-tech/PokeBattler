@@ -42,7 +42,7 @@ public class PokedexUI {
                     case 6 -> {
                         manager.seedDefaultData();
                         FileManager.savePokemons(manager.getPokemons());
-                        System.out.println("Pokédex återställt till 6 nya slumpade Pokémon!");
+                        System.out.println("Pokédex återställt till standard-Pokémon!");
                     }
                     case 7 -> {
                         FileManager.savePokemons(manager.getPokemons());
@@ -72,8 +72,8 @@ public class PokedexUI {
         UIHelper.printHeader();
         for (int i = 0; i < list.size(); i++) {
             Pokemon p = list.get(i);
-            System.out.printf("#%-2d %-12s │ Typ: %-10s │ HP: %3d/%-3d │ Defense: %-3d%n",
-                    (i + 1), p.getName(), p.getType(), p.getCurrentHp(), p.getMaxHp(), p.getDefense());
+            System.out.printf("#%-2d %-12s │ Typ: %-10s │ HP: %3d/%-3d │ Försvar: %-3d │ Snabbhet: %-3d%n",
+                    (i + 1), p.getName(), p.getType(), p.getCurrentHp(), p.getMaxHp(), p.getDefense(), p.getSpeed());
             for (Attack a : p.getAttacks()) {
                 System.out.printf("     └─ %-15s Skada: %-3d │ Träff: %3d%% │ Typ: %s%n",
                         a.getName(), a.getBaseDamage(), a.getAccuracy(), a.getType());
@@ -90,6 +90,7 @@ public class PokedexUI {
 
         int maxHp = InputHelper.readInt(scanner, "Max HP (10-1000): ", 10, 1000);
         int defense = InputHelper.readInt(scanner, "Försvar (0-100): ", 0, 100);
+        int speed = InputHelper.readInt(scanner, "Snabbhet (1-300): ", 1, 300);
 
         List<Attack> attacks = new ArrayList<>();
         int attackCount = InputHelper.readInt(scanner, "Antal attacker (1-4): ", 1, 4);
@@ -104,7 +105,7 @@ public class PokedexUI {
             attacks.add(new Attack(aName, aDmg, aAcc, aType));
         }
 
-        Pokemon newPokemon = new Pokemon(name, type, maxHp, defense, attacks);
+        Pokemon newPokemon = new Pokemon(name, type, maxHp, defense, speed, attacks);
         manager.addPokemon(newPokemon);
         FileManager.savePokemons(manager.getPokemons());
         System.out.println("✅ Pokémon tillagd och sparad till JSON!");
@@ -126,10 +127,11 @@ public class PokedexUI {
             System.out.println("2) Ändra typ (" + p.getType() + ")");
             System.out.println("3) Ändra Max HP (" + p.getMaxHp() + ")");
             System.out.println("4) Ändra Försvar (" + p.getDefense() + ")");
-            System.out.println("5) Hantera/Redigera attacker (" + p.getAttacks().size() + "/4 st)");
-            System.out.println("6) Klar / Tillbaka till huvudmenyn");
+            System.out.println("5) Ändra Snabbhet (" + p.getSpeed() + ")");
+            System.out.println("6) Hantera/Redigera attacker (" + p.getAttacks().size() + "/4 st)");
+            System.out.println("7) Klar / Tillbaka till huvudmenyn");
 
-            int subChoice = InputHelper.readInt(scanner, "Val: ", 1, 6);
+            int subChoice = InputHelper.readInt(scanner, "Val: ", 1, 7);
 
             switch (subChoice) {
                 case 1 -> {
@@ -152,8 +154,13 @@ public class PokedexUI {
                     p.setDefense(newDefense);
                     System.out.println("✅ Försvar uppdaterat!");
                 }
-                case 5 -> editAttacksMenu(p);
-                case 6 -> editing = false;
+                case 5 -> {
+                    int newSpeed = InputHelper.readInt(scanner, "Ny Snabbhet (1-300): ", 1, 300);
+                    p.setSpeed(newSpeed);
+                    System.out.println("✅ Snabbhet uppdaterad!");
+                }
+                case 6 -> editAttacksMenu(p);
+                case 7 -> editing = false;
             }
             FileManager.savePokemons(manager.getPokemons());
         }

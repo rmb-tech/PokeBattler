@@ -3,19 +3,19 @@ package se.rmbtech.pokebattler.util;
 public class UIHelper {
 
     public static void printFirsStartHeader() {
-        System.out.println("===================================================================");
-        System.out.println("                      VÄLKOMMEN TILL POKÉDEX                       ");
-        System.out.println("===================================================================");
+        System.out.println("=============================================================================");
+        System.out.println("                           VÄLKOMMEN TILL POKÉDEX                            ");
+        System.out.println("=============================================================================");
     }
 
     public static void printHeader() {
-        System.out.println("===================================================================");
-        System.out.println("                              POKÉDEX                              ");
-        System.out.println("===================================================================");
+        System.out.println("=============================================================================");
+        System.out.println("                                   POKÉDEX                                   ");
+        System.out.println("=============================================================================");
     }
 
     public static void printDivider() {
-        System.out.println("-------------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------");
     }
 
     public static void printMenu() {
