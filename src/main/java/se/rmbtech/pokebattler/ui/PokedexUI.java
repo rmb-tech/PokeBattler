@@ -206,12 +206,13 @@ public class PokedexUI {
             String aName = InputHelper.readString(scanner, "Attacknamn: ");
             int aDmg = InputHelper.readInt(scanner, "Basskada (5-250): ", 5, 250);
             int aAcc = InputHelper.readInt(scanner, "Träffsäkerhet (0-100): ", 0, 100);
-
             PokemonType aType = selectType("Välj typ för den nya attacken:");
-
-            attacks.add(new Attack(aName, aDmg, aAcc, aType));
-            p.setAttacks(attacks);
-            System.out.println("✅ Ny attack tillagd!");
+            try {
+                p.addAttack(new Attack(aName, aDmg, aAcc, aType));
+                System.out.println("✅ Ny attack tillagd!");
+            } catch (InvalidPokemonException e) {
+                System.out.println("❌ " + e.getMessage());
+            }
 
         } else if (choice == 3) {
             if (attacks.size() <= 1) {

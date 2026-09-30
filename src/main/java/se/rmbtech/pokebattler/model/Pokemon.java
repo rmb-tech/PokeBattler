@@ -94,4 +94,20 @@ public class Pokemon {
     public List<Attack> getAttacks() {
         return new ArrayList<>(attacks);
     }
+
+    public void addAttack(Attack attack) {
+        if (attack == null) {
+            throw new InvalidPokemonException("Attacken kan inte vara null.");
+        }
+        if (this.attacks.size() >= 4) {
+            throw new InvalidPokemonException("En Pokémon kan inte ha fler än 4 attacker!");
+        }
+        this.attacks.add(attack);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s [%s] - HP: %d/%d | Defense: %d | Attacker: %d/4",
+                name, type, currentHp, maxHp, defense, attacks.size());
+    }
 }

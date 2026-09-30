@@ -24,7 +24,6 @@ public class Main {
             FileManager.savePokemons(manager.getPokemons());
             System.out.println("Startrooster skapad och sparad!");
         }
-
         PokedexUI ui = new PokedexUI(manager);
         ui.start();
     }

@@ -65,4 +65,9 @@ public class Attack {
         return type;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s (Skada: %d, Träff: %d%%, Typ: %s)",
+                name, baseDamage, accuracy, type);
+    }
 }
