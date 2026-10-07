@@ -2,25 +2,23 @@ package se.rmbtech.pokebattler.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import se.rmbtech.pokebattler.exception.InvalidPokemonException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+
 public class Pokemon {
     private String name;
-    private int maxHp;
-    private int defense;
-    private int speed;
-
-    @JsonProperty("type")
     private PokemonType type;
-
-    @JsonProperty("currentHp")
+    private int maxHp;
     private int currentHp;
+    private int defense;
+    private int baseDefense;
+    private int speed;
     private List<Attack> attacks;
+    private boolean statLowered = false;
 
     @JsonCreator
     protected Pokemon() {
@@ -33,8 +31,8 @@ public class Pokemon {
         setMaxHp(maxHp);
         setDefense(defense);
         setSpeed(speed);
-        this.currentHp = maxHp;
         setAttacks(attacks);
+        this.baseDefense = this.defense;
     }
 
     public void setName(String name) {
@@ -62,7 +60,9 @@ public class Pokemon {
     public void setCurrentHp(int currentHp) {
         if (currentHp < 0) {
             this.currentHp = 0;
-        } else this.currentHp = Math.min(currentHp, this.maxHp);
+        } else {
+            this.currentHp = Math.min(currentHp, this.maxHp);
+        }
     }
 
     public void setDefense(int defense) {
@@ -70,10 +70,13 @@ public class Pokemon {
             throw new InvalidPokemonException("Försvar (Defense) måste vara mellan 0 och 100.");
         }
         this.defense = defense;
+        if (this.baseDefense == 0) {
+            this.baseDefense = defense;
+        }
     }
 
-    public void setSpeed(int speed){
-        if (speed < 1 || speed > 300){
+    public void setSpeed(int speed) {
+        if (speed < 1 || speed > 300) {
             throw new InvalidPokemonException("Snabbhet (Speed) måste vara mellan 1 och 300.");
         }
         this.speed = speed;
@@ -84,6 +87,14 @@ public class Pokemon {
             throw new InvalidPokemonException("En Pokémon måste ha mellan 1 och 4 attacker.");
         }
         this.attacks = new ArrayList<>(attacks);
+    }
+
+    public boolean isStatLowered() {
+        return statLowered;
+    }
+
+    public void setStatLowered(boolean statLowered) {
+        this.statLowered = statLowered;
     }
 
     public String getName() {
@@ -106,12 +117,21 @@ public class Pokemon {
         return defense;
     }
 
-    public int getSpeed(){
+    public int getBaseDefense() {
+        return baseDefense;
+    }
+
+    public int getSpeed() {
         return speed;
     }
 
     public List<Attack> getAttacks() {
         return new ArrayList<>(attacks);
+    }
+
+    public void resetBattleStats() {
+        this.defense = this.baseDefense;
+        this.statLowered = false;
     }
 
     public void takeDamage(int damage) {
@@ -122,8 +142,7 @@ public class Pokemon {
     public boolean isFainted() {
         return this.currentHp <= 0;
     }
-
-    //Används inte än.
+    // Används inte än
     public void healFull() {
         this.currentHp = this.maxHp;
     }
@@ -140,6 +159,7 @@ public class Pokemon {
 
     @Override
     public String toString() {
-        return String.format("%s [%s] - HP: %d/%d | Försvar: %d | Snabbhet: %d | Attacker: %d/4", name, type, currentHp, maxHp, defense, speed, attacks.size());
+        return String.format("%s [%s] - HP: %d/%d | Försvar: %d | Snabbhet: %d | Attacker: %d/4",
+                name, type, currentHp, maxHp, defense, speed, attacks.size());
     }
 }

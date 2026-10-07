@@ -2,6 +2,7 @@ package se.rmbtech.pokebattler.service;
 
 import se.rmbtech.pokebattler.model.Attack;
 import se.rmbtech.pokebattler.model.Pokemon;
+import se.rmbtech.pokebattler.model.StatusAttack;
 import se.rmbtech.pokebattler.util.InputHelper;
 
 import java.util.List;
@@ -60,6 +61,8 @@ public class BattleEngine {
             System.out.println("☠️ ALLA DINA POKÉMON HAR SVIMMAT. DU FÖRLORADE!");
         }
         System.out.println("==================================================");
+        playerTeam.forEach(Pokemon::resetBattleStats);
+        cpuTeam.forEach(Pokemon::resetBattleStats);
     }
 
     private void fightDuel(Pokemon player, Pokemon cpu) {
@@ -104,7 +107,17 @@ public class BattleEngine {
 
     private void executeCpuTurn(Pokemon attacker, Pokemon defender) {
         List<Attack> attacks = attacker.getAttacks();
-        Attack attack = attacks.get(random.nextInt(attacks.size()));
+        // Välj bara statusattacker om motståndaren INTE redan har blivit påverkad
+        List<Attack> validAttacks = attacks.stream()
+                .filter(a -> !(a instanceof StatusAttack && defender.isStatLowered()))
+                .toList();
+
+        // Fallback om Pokémonen enbart har statusattacker
+        if (validAttacks.isEmpty()) {
+            validAttacks = attacks;
+        }
+
+        Attack attack = validAttacks.get(random.nextInt(validAttacks.size()));
 
         System.out.println("\n--- MOTSTÅNDARENS TUR ---");
         performAttack(attacker, defender, attack);
