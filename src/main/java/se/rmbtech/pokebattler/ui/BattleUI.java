@@ -22,7 +22,6 @@ public class BattleUI {
     public void startBattleMenu() {
         List<Pokemon> availablePokemons = manager.getPokemons();
 
-        // Filtrera ut de som inte har svimmat (HP > 0)
         List<Pokemon> readyPokemons = availablePokemons.stream()
                 .filter(p -> !p.isFainted())
                 .toList();

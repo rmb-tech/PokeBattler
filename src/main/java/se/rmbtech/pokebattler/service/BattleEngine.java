@@ -34,7 +34,6 @@ public class BattleEngine {
                     activeCpu.getName(), activeCpu.getCurrentHp(), activeCpu.getMaxHp());
             System.out.println("--------------------------------------------------");
 
-            // Kör duell tills en av dem svimmar
             fightDuel(activePlayer, activeCpu);
 
             if (activePlayer.isFainted()) {
@@ -94,7 +93,7 @@ public class BattleEngine {
 
         for (int i = 0; i < attacks.size(); i++) {
             Attack a = attacks.get(i);
-            System.out.printf("%d) %s (Skada: %d, Träff: %d%%)%n", (i + 1), a.getName(), a.getBaseDamage(), a.getAccuracy());
+            System.out.printf("%d) %s%n", (i + 1), a.toString());
         }
 
         int choice = InputHelper.readInt(scanner, "Välj attack: ", 1, attacks.size()) - 1;
@@ -113,18 +112,6 @@ public class BattleEngine {
 
     private void performAttack(Pokemon attacker, Pokemon defender, Attack attack) {
         System.out.println(attacker.getName() + " använder " + attack.getName() + "!");
-
-        if (random.nextInt(100) < attack.getAccuracy()) {
-            int rawDamage = attack.getBaseDamage();
-            int blockedDamage = defender.getDefense() / 2;
-            int finalDamage = Math.max(1, rawDamage - blockedDamage);
-
-            defender.takeDamage(finalDamage);
-
-            System.out.printf("💥 Träff! (Basskada: %d, Försvar blockerade: %d) ➔ %s tog %d skada! (HP: %d/%d)%n",
-                    rawDamage, blockedDamage, defender.getName(), finalDamage, defender.getCurrentHp(), defender.getMaxHp());
-        } else {
-            System.out.println("💨 Attacken missade!");
-        }
+        attack.execute(attacker, defender);
     }
 }

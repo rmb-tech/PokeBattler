@@ -2,22 +2,32 @@ package se.rmbtech.pokebattler.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import se.rmbtech.pokebattler.exception.InvalidPokemonException;
 
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Attack {
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "attackType",
+        defaultImpl = DamageAttack.class
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = DamageAttack.class, name = "damage"),
+        @JsonSubTypes.Type(value = StatusAttack.class, name = "status")
+})
+public abstract class Attack implements BattleAction {
     private String name;
-    private int baseDamage;
     private int accuracy;
     private PokemonType type;
 
     @JsonCreator
-    protected Attack() {
-    }// Krävs för Jackson (JSON)
+    protected Attack(){}
 
-    public Attack(String name, int baseDamage, int accuracy, PokemonType type) {
+    public Attack(String name, int accuracy, PokemonType type) {
         setName(name);
-        setBaseDamage(baseDamage);
         setAccuracy(accuracy);
         setType(type);
     }
@@ -35,12 +45,6 @@ public class Attack {
         }
         this.type = type;
     }
-    public void setBaseDamage(int baseDamage) {
-        if (baseDamage < 5 || baseDamage > 250) {
-            throw new InvalidPokemonException("Basskada måste vara mellan 5 och 250.");
-        }
-        this.baseDamage = baseDamage;
-    }
 
     public void setAccuracy(int accuracy) {
         if (accuracy < 0 || accuracy > 100) {
@@ -53,10 +57,6 @@ public class Attack {
         return name;
     }
 
-    public int getBaseDamage() {
-        return baseDamage;
-    }
-
     public int getAccuracy() {
         return accuracy;
     }
@@ -66,8 +66,5 @@ public class Attack {
     }
 
     @Override
-    public String toString() {
-        return String.format("%s (Skada: %d, Träff: %d%%, Typ: %s)",
-                name, baseDamage, accuracy, type);
-    }
+    public abstract void execute(Pokemon attacker, Pokemon defender);
 }

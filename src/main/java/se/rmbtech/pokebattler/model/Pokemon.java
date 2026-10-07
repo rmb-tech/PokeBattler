@@ -25,7 +25,7 @@ public class Pokemon {
     @JsonCreator
     protected Pokemon() {
         this.attacks = new ArrayList<>();
-    } // Krävs för Jackson (JSON)
+    }
 
     public Pokemon(String name, PokemonType type, int maxHp, int defense, int speed, List<Attack> attacks) {
         setName(name);
@@ -123,6 +123,7 @@ public class Pokemon {
         return this.currentHp <= 0;
     }
 
+    //Används inte än.
     public void healFull() {
         this.currentHp = this.maxHp;
     }
