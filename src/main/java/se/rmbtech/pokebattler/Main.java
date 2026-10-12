@@ -19,7 +19,7 @@ public class Main {
             manager.setPokemons(loadedData);
             System.out.println("Data har laddats framgångsrikt!");
         } else {
-            UIHelper.simulateLoading("Ingen användbar sparfil hittades. Genererar en startrooster med 6 slumpade Pokémon", 2000);
+            UIHelper.simulateLoading("Ingen användbar3 sparfil hittades. Genererar en startrooster med 6 slumpade Pokémon", 2000);
             manager.seedDefaultData();
             FileManager.savePokemons(manager.getPokemons());
             System.out.println("Startrooster skapad och sparad!");

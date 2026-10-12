@@ -7,10 +7,10 @@ import java.util.Scanner;
 
 public class InputHelper {
 
-    private static String nextLine(Scanner scanner){
+    private static String nextLine(Scanner scanner) {
         try {
             return scanner.nextLine().trim();
-        }catch (NoSuchElementException | IllegalStateException e){
+        } catch (NoSuchElementException | IllegalStateException e) {
             throw new InputCancelledException();
         }
     }
@@ -18,14 +18,14 @@ public class InputHelper {
     public static int readInt(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);
-            String input = scanner.nextLine().trim();
+            String input = nextLine(scanner);
 
             if (input.isEmpty()) {
                 System.out.println("❗Ogiltig input.. Skriv ett heltal");
                 continue;
             }
             try {
-                return Integer.parseInt(input.trim());
+                return Integer.parseInt(input);
             } catch (NumberFormatException e) {
                 System.out.println("❗Ogiltig input. Skriv ett heltal");
             }
@@ -45,7 +45,7 @@ public class InputHelper {
     public static String readString(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);
-            String input = scanner.nextLine().trim();
+            String input = nextLine(scanner);
 
             if (!input.isEmpty()) {
                 return input;
