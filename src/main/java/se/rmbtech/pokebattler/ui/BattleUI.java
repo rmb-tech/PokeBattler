@@ -2,10 +2,7 @@ package se.rmbtech.pokebattler.ui;
 
 import se.rmbtech.pokebattler.model.BattleResult;
 import se.rmbtech.pokebattler.model.Pokemon;
-import se.rmbtech.pokebattler.service.BattleEngine;
-import se.rmbtech.pokebattler.service.PokedexService;
-import se.rmbtech.pokebattler.service.PokemonDataSeeder;
-import se.rmbtech.pokebattler.service.StatsService;
+import se.rmbtech.pokebattler.service.*;
 import se.rmbtech.pokebattler.util.InputHelper;
 
 import java.util.ArrayList;
@@ -43,9 +40,17 @@ public class BattleUI {
         System.out.println("\n=== ⚔️ STRIDSLÄGE ⚔️ ===");
         System.out.println("1) 1v1 Strid");
         System.out.println("2) 3v3 Lagstrid");
-        int mode = InputHelper.readInt(scanner, "Välj typ av strid: ", 1, 2);
+        System.out.println("3) RAID (5v1 mot Raid-boss)");
+        int mode = InputHelper.readInt(scanner, "Välj typ av strid: ", 1, 3);
 
-        int teamSize = (mode == 1) ? 1 : 3;
+        int teamSize;
+        if (mode == 1) {
+            teamSize = 1;
+        } else if (mode == 2) {
+            teamSize = 3;
+        } else {
+            teamSize = 5;
+        }
 
         if (readyPokemons.size() < teamSize) {
             System.out.println("❌ Du behöver minst " + teamSize + " frisk(a) Pokémon i ditt Pokédex för detta läge!");
@@ -54,9 +59,16 @@ public class BattleUI {
 
         List<Pokemon> playerTeam = selectPlayerTeam(readyPokemons, teamSize);
 
-        List<Pokemon> cpuTeam = new ArrayList<>();
-        for (int i = 0; i < teamSize; i++) {
-            cpuTeam.add(PokemonDataSeeder.getRandomSeedPokemon());
+        List<Pokemon> cpuTeam;
+        if (mode == 3) {
+            Pokemon boss = RaidDataSeeder.getRandomRaidBoss();
+            System.out.printf("\n🚨 EN EPISK RAID-BOSS DYKER UPP: %s (HP: %d)!\n", boss.getName(), boss.getMaxHp());
+            cpuTeam = List.of(boss);
+        } else {
+            cpuTeam = new ArrayList<>();
+            for (int i = 0; i < teamSize; i++) {
+                cpuTeam.add(PokemonDataSeeder.getRandomSeedPokemon());
+            }
         }
 
         BattleEngine engine = new BattleEngine(scanner);
@@ -67,7 +79,7 @@ public class BattleUI {
 
     private List<Pokemon> selectPlayerTeam(List<Pokemon> readyPokemons, int teamSize) {
         List<Pokemon> team = new ArrayList<>();
-        System.out.println("\n--- Välj dina " + teamSize + " fighters ---");
+        System.out.println("\n--- Välj dina " + teamSize + " Pokémon ---");
 
         for (int i = 0; i < readyPokemons.size(); i++) {
             Pokemon p = readyPokemons.get(i);
