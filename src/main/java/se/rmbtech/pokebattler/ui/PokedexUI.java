@@ -1,5 +1,6 @@
 package se.rmbtech.pokebattler.ui;
 
+import se.rmbtech.pokebattler.exception.InputCancelledException;
 import se.rmbtech.pokebattler.exception.InvalidPokemonException;
 import se.rmbtech.pokebattler.exception.PokemonNotFoundException;
 import se.rmbtech.pokebattler.model.Attack;
@@ -29,13 +30,23 @@ public class PokedexUI {
     }
 
     public void start() {
-        boolean running = true;
         UIHelper.printFirsStartHeader();
         UIHelper.printPikachuArt();
+        try {
+            runMainMenu();
+        } catch (InputCancelledException e) {
+            System.out.println("\nInmatningen avbröts. Sparar och avslutar...");
+        } finally {
+            FileManager.savePokemons(manager.getPokemons());
+            scanner.close();
+        }
+    }
 
+    private void runMainMenu() {
+        boolean running = true;
         while (running) {
             UIHelper.printMainMenu();
-            int choice = InputHelper.readInt(scanner, "Val: ", 1, 8);
+            int choice = InputHelper.readInt(scanner, "Val: ", 1, 6);   // var 1, 8
 
             try {
                 switch (choice) {
@@ -44,19 +55,14 @@ public class PokedexUI {
                     case 3 -> battleUI.startBattleMenu();
                     case 4 -> resetToDefaultData();
                     case 5 -> saveToFile();
-                    case 6 -> {
-                        FileManager.savePokemons(manager.getPokemons());
-                        System.out.println("Sparar och avslutar...");
-                        running = false;
-                    }
+                    case 6 -> running = false;
                 }
             } catch (InvalidPokemonException | PokemonNotFoundException e) {
                 System.out.println("Felmeddelande: " + e.getMessage());
             }
             System.out.println();
         }
-
-        scanner.close();
+        System.out.println("Sparar och avslutar...");
     }
 
     private void pokedexSubMenu() {

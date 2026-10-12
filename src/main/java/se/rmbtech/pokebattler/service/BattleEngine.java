@@ -107,12 +107,10 @@ public class BattleEngine {
 
     private void executeCpuTurn(Pokemon attacker, Pokemon defender) {
         List<Attack> attacks = attacker.getAttacks();
-        // Välj bara statusattacker om motståndaren INTE redan har blivit påverkad
         List<Attack> validAttacks = attacks.stream()
                 .filter(a -> !(a instanceof StatusAttack && defender.isStatLowered()))
                 .toList();
 
-        // Fallback om Pokémonen enbart har statusattacker
         if (validAttacks.isEmpty()) {
             validAttacks = attacks;
         }

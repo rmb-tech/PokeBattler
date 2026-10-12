@@ -56,11 +56,9 @@ public abstract class Attack implements BattleAction {
     public String getName() {
         return name;
     }
-
     public int getAccuracy() {
         return accuracy;
     }
-
     public PokemonType getType() {
         return type;
     }

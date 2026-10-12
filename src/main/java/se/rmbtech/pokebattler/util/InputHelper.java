@@ -1,8 +1,19 @@
 package se.rmbtech.pokebattler.util;
 
+import se.rmbtech.pokebattler.exception.InputCancelledException;
+
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class InputHelper {
+
+    private static String nextLine(Scanner scanner){
+        try {
+            return scanner.nextLine().trim();
+        }catch (NoSuchElementException | IllegalStateException e){
+            throw new InputCancelledException();
+        }
+    }
 
     public static int readInt(Scanner scanner, String prompt) {
         while (true) {
