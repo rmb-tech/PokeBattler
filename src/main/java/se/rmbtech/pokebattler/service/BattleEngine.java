@@ -18,6 +18,15 @@ public class BattleEngine {
     }
 
     public void startTeamBattle(List<Pokemon> playerTeam, List<Pokemon> cpuTeam) {
+        try {
+            runTeamBattle(playerTeam, cpuTeam);
+        } finally {
+            playerTeam.forEach(Pokemon::resetBattleStats);
+            cpuTeam.forEach(Pokemon::resetBattleStats);
+        }
+    }
+
+    private void runTeamBattle(List<Pokemon> playerTeam, List<Pokemon> cpuTeam) {
         int playerIdx = 0;
         int cpuIdx = 0;
 
@@ -61,8 +70,6 @@ public class BattleEngine {
             System.out.println("☠️ ALLA DINA POKÉMON HAR SVIMMAT. DU FÖRLORADE!");
         }
         System.out.println("==================================================");
-        playerTeam.forEach(Pokemon::resetBattleStats);
-        cpuTeam.forEach(Pokemon::resetBattleStats);
     }
 
     private void fightDuel(Pokemon player, Pokemon cpu) {

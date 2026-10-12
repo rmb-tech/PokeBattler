@@ -20,14 +20,19 @@ public class BattleUI {
     }
 
     public void startBattleMenu() {
-        List<Pokemon> availablePokemons = manager.getPokemons();
+        List<Pokemon> allPokemons = manager.getPokemons();
+        if (allPokemons.isEmpty()) {
+            System.out.println("❌ Du äger inga Pokémon! Fånga eller lägg till en först.");
+            return;
+        }
 
-        List<Pokemon> readyPokemons = availablePokemons.stream()
+        List<Pokemon> readyPokemons = allPokemons.stream()
                 .filter(p -> !p.isFainted())
+                .filter(p -> !p.getAttacks().isEmpty())
                 .toList();
 
         if (readyPokemons.isEmpty()) {
-            System.out.println("❌ Alla dina Pokémon har svimmat! Du måste läka dem i Pokédex-menyn innan du kan strida.");
+            System.out.println("❌ Inga stridsdugliga Pokémon (svimmade eller utan attacker). Läk dem i Pokédex-menyn.");
             return;
         }
 
