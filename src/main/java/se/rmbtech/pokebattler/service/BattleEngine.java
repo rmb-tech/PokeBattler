@@ -13,7 +13,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class BattleEngine {
-    private static final int MAX_ROUNDS = 50;
+    private static final int MAX_ROUNDS = 30;
 
     private final Scanner scanner;
     private final Random random = new Random();
