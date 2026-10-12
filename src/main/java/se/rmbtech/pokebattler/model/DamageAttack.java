@@ -45,6 +45,10 @@ public class DamageAttack extends Attack {
         boolean isCritical = random.nextInt(100) < 10;
         double critMultiplier = isCritical ? 1.5 : 1.0;
         double typeMultiplier = getType().getMultiplierAgainst(defender.getType());
+        if (typeMultiplier == 0.0) {
+            System.out.printf("🚫 Det har ingen effekt på %s...%n", defender.getName());
+            return;
+        }
 
         int blockedDamage = defender.getDefense() / 2;
         int rawDamage = (int) Math.round((baseDamage - blockedDamage) * typeMultiplier * critMultiplier);

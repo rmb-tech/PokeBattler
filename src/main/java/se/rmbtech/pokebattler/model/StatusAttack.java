@@ -42,15 +42,15 @@ public class StatusAttack extends Attack {
             return;
         }
         if (defender.isStatLowered() || defender.getDefense() <= 0) {
-            System.out.printf("✨ %s använde %s, men %s:s försvar kan inte sjunka lägre!%n", attacker.getName(), getName(), defender.getName());
+            System.out.printf("✨ %s använde %s, men %s:s försvar kan inte sjunka lägre!%n",
+                    attacker.getName(), getName(), defender.getName());
             return;
         }
 
-        int newDefense = Math.max(0, defender.getDefense() - statReduction);
-        defender.setDefense(newDefense);
-        defender.setStatLowered(true);
+        defender.lowerDefense(statReduction);
 
-        System.out.printf("✨ %s sänkte %s försvarsvärde till %d!%n", attacker.getName(), defender.getName(), newDefense);
+        System.out.printf("✨ %s sänkte %s försvarsvärde till %d!%n",
+                attacker.getName(), defender.getName(), defender.getDefense());
     }
 
     @Override
