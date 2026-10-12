@@ -1,9 +1,11 @@
 package se.rmbtech.pokebattler.ui;
 
+import se.rmbtech.pokebattler.model.BattleResult;
 import se.rmbtech.pokebattler.model.Pokemon;
 import se.rmbtech.pokebattler.service.BattleEngine;
 import se.rmbtech.pokebattler.service.PokedexService;
 import se.rmbtech.pokebattler.service.PokemonDataSeeder;
+import se.rmbtech.pokebattler.service.StatsService;
 import se.rmbtech.pokebattler.util.InputHelper;
 
 import java.util.ArrayList;
@@ -13,10 +15,12 @@ import java.util.Scanner;
 public class BattleUI {
     private final Scanner scanner;
     private final PokedexService manager;
+    private final StatsService statsService;
 
-    public BattleUI(Scanner scanner, PokedexService manager) {
+    public BattleUI(Scanner scanner, PokedexService manager, StatsService statsService) {
         this.scanner = scanner;
         this.manager = manager;
+        this.statsService = statsService;
     }
 
     public void startBattleMenu() {
@@ -56,7 +60,9 @@ public class BattleUI {
         }
 
         BattleEngine engine = new BattleEngine(scanner);
-        engine.startTeamBattle(playerTeam, cpuTeam);
+        BattleResult result = engine.startTeamBattle(playerTeam, cpuTeam);
+        statsService.recordBattle(result);
+        System.out.println("📊 Resultatet har sparats i statistiken.");
     }
 
     private List<Pokemon> selectPlayerTeam(List<Pokemon> readyPokemons, int teamSize) {

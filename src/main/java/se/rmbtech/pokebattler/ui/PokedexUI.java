@@ -11,6 +11,7 @@ import se.rmbtech.pokebattler.model.StatusAttack;
 import se.rmbtech.pokebattler.repository.FileManager;
 import se.rmbtech.pokebattler.service.PokedexService;
 import se.rmbtech.pokebattler.service.PokemonDataSeeder;
+import se.rmbtech.pokebattler.service.StatsService;
 import se.rmbtech.pokebattler.util.InputHelper;
 import se.rmbtech.pokebattler.util.UIHelper;
 
@@ -22,11 +23,13 @@ public class PokedexUI {
     private final Scanner scanner;
     private final PokedexService manager;
     private final BattleUI battleUI;
+    private final StatsUI statsUI;
 
-    public PokedexUI(PokedexService manager) {
+    public PokedexUI(PokedexService manager, StatsService statsService) {
         this.scanner = new Scanner(System.in);
         this.manager = manager;
-        this.battleUI = new BattleUI(this.scanner, manager);
+        this.battleUI = new BattleUI(this.scanner, manager, statsService);
+        this.statsUI = new StatsUI(statsService);
     }
 
     public void start() {
@@ -46,16 +49,17 @@ public class PokedexUI {
         boolean running = true;
         while (running) {
             UIHelper.printMainMenu();
-            int choice = InputHelper.readInt(scanner, "Val: ", 1, 6);   // var 1, 8
+            int choice = InputHelper.readInt(scanner, "Val: ", 1, 7);
 
             try {
                 switch (choice) {
                     case 1 -> pokedexSubMenu();
                     case 2 -> catchRandomPokemon();
                     case 3 -> battleUI.startBattleMenu();
-                    case 4 -> resetToDefaultData();
-                    case 5 -> saveToFile();
-                    case 6 -> running = false;
+                    case 4 -> statsUI.showStats();
+                    case 5 -> resetToDefaultData();
+                    case 6 -> saveToFile();
+                    case 7 -> running = false;
                 }
             } catch (InvalidPokemonException | PokemonNotFoundException e) {
                 System.out.println("Felmeddelande: " + e.getMessage());

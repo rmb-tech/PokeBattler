@@ -1,8 +1,10 @@
 package se.rmbtech.pokebattler;
 
 import se.rmbtech.pokebattler.repository.FileManager;
+import se.rmbtech.pokebattler.repository.StatsRepository;
 import se.rmbtech.pokebattler.service.PokedexService;
 import se.rmbtech.pokebattler.model.Pokemon;
+import se.rmbtech.pokebattler.service.StatsService;
 import se.rmbtech.pokebattler.ui.PokedexUI;
 import se.rmbtech.pokebattler.util.UIHelper;
 
@@ -24,7 +26,8 @@ public class Main {
             FileManager.savePokemons(manager.getPokemons());
             System.out.println("Startrooster skapad och sparad!");
         }
-        PokedexUI ui = new PokedexUI(manager);
+        StatsService statsService = new StatsService(new StatsRepository("battle-stats.json"));
+        PokedexUI ui = new PokedexUI(manager, statsService);
         ui.start();
     }
 }

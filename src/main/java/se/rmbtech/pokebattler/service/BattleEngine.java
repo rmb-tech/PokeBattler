@@ -1,15 +1,20 @@
 package se.rmbtech.pokebattler.service;
 
 import se.rmbtech.pokebattler.model.Attack;
+import se.rmbtech.pokebattler.model.BattleResult;
+import se.rmbtech.pokebattler.model.BattleResult.DuelResult;
 import se.rmbtech.pokebattler.model.Pokemon;
 import se.rmbtech.pokebattler.model.StatusAttack;
 import se.rmbtech.pokebattler.util.InputHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
 public class BattleEngine {
+    private static final int MAX_ROUNDS = 50;
+
     private final Scanner scanner;
     private final Random random = new Random();
 
@@ -17,16 +22,18 @@ public class BattleEngine {
         this.scanner = scanner;
     }
 
-    public void startTeamBattle(List<Pokemon> playerTeam, List<Pokemon> cpuTeam) {
+    public BattleResult startTeamBattle(List<Pokemon> playerTeam, List<Pokemon> cpuTeam) {
         try {
-            runTeamBattle(playerTeam, cpuTeam);
+            return runTeamBattle(playerTeam, cpuTeam);
         } finally {
             playerTeam.forEach(Pokemon::resetBattleStats);
             cpuTeam.forEach(Pokemon::resetBattleStats);
         }
     }
 
-    private void runTeamBattle(List<Pokemon> playerTeam, List<Pokemon> cpuTeam) {
+    private BattleResult runTeamBattle(List<Pokemon> playerTeam, List<Pokemon> cpuTeam) {
+        List<DuelResult> duels = new ArrayList<>();
+        List<String> attacksUsed = new ArrayList<>();
         int playerIdx = 0;
         int cpuIdx = 0;
 
@@ -44,7 +51,8 @@ public class BattleEngine {
                     activeCpu.getName(), activeCpu.getCurrentHp(), activeCpu.getMaxHp());
             System.out.println("--------------------------------------------------");
 
-            fightDuel(activePlayer, activeCpu);
+            boolean playerWonDuel = fightDuel(activePlayer, activeCpu, attacksUsed);
+            duels.add(new DuelResult(activePlayer.getName(), playerWonDuel));
 
             if (activePlayer.isFainted()) {
                 System.out.println("\n💀 Din " + activePlayer.getName() + " svimmade!");
@@ -63,21 +71,30 @@ public class BattleEngine {
             }
         }
 
+        boolean playerWon = playerIdx < playerTeam.size();
+
         System.out.println("\n==================================================");
-        if (playerIdx < playerTeam.size()) {
-            System.out.println("🏆 DU VANN STRIDEN!");
-        } else {
-            System.out.println("☠️ ALLA DINA POKÉMON HAR SVIMMAT. DU FÖRLORADE!");
-        }
+        System.out.println(playerWon
+                ? "🏆 DU VANN STRIDEN!"
+                : "☠️ ALLA DINA POKÉMON HAR SVIMMAT. DU FÖRLORADE!");
         System.out.println("==================================================");
+
+        return new BattleResult(playerWon, duels, attacksUsed);
     }
 
-    private void fightDuel(Pokemon player, Pokemon cpu) {
+    /** Returnerar true om spelarens Pokémon vann duellen. */
+    private boolean fightDuel(Pokemon player, Pokemon cpu, List<String> attacksUsed) {
+        int round = 0;
         while (!player.isFainted() && !cpu.isFainted()) {
+            if (round++ >= MAX_ROUNDS) {
+                resolveStalemate(player, cpu);
+                break;
+            }
+
             boolean playerFirst = determineTurnOrder(player, cpu);
 
             if (playerFirst) {
-                executePlayerTurn(player, cpu);
+                executePlayerTurn(player, cpu, attacksUsed);
                 if (!cpu.isFainted()) {
                     executeCpuTurn(cpu, player);
                 }
@@ -85,9 +102,21 @@ public class BattleEngine {
                 System.out.println("⚡ Vild " + cpu.getName() + " var snabbare och attackerar först!");
                 executeCpuTurn(cpu, player);
                 if (!player.isFainted()) {
-                    executePlayerTurn(player, cpu);
+                    executePlayerTurn(player, cpu, attacksUsed);
                 }
             }
+        }
+        return cpu.isFainted();
+    }
+
+    private void resolveStalemate(Pokemon player, Pokemon cpu) {
+        System.out.printf("%n⏱️ Dödläge efter %d rundor! Den med högst HP-procent vinner duellen.%n", MAX_ROUNDS);
+        double playerRatio = (double) player.getCurrentHp() / player.getMaxHp();
+        double cpuRatio = (double) cpu.getCurrentHp() / cpu.getMaxHp();
+        if (playerRatio > cpuRatio) {
+            cpu.takeDamage(cpu.getCurrentHp());
+        } else {
+            player.takeDamage(player.getCurrentHp());
         }
     }
 
@@ -97,18 +126,18 @@ public class BattleEngine {
         return random.nextBoolean();
     }
 
-    private void executePlayerTurn(Pokemon attacker, Pokemon defender) {
+    private void executePlayerTurn(Pokemon attacker, Pokemon defender, List<String> attacksUsed) {
         System.out.println("\n--- DIN TUR (" + attacker.getName() + ") ---");
         List<Attack> attacks = attacker.getAttacks();
 
         for (int i = 0; i < attacks.size(); i++) {
-            Attack a = attacks.get(i);
-            System.out.printf("%d) %s%n", (i + 1), a.toString());
+            System.out.printf("%d) %s%n", (i + 1), attacks.get(i));
         }
 
         int choice = InputHelper.readInt(scanner, "Välj attack: ", 1, attacks.size()) - 1;
         Attack attack = attacks.get(choice);
 
+        attacksUsed.add(attack.getName());
         performAttack(attacker, defender, attack);
     }
 

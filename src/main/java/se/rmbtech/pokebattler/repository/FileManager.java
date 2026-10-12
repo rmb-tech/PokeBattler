@@ -3,14 +3,14 @@ package se.rmbtech.pokebattler.repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import se.rmbtech.pokebattler.model.Pokemon;
+import se.rmbtech.pokebattler.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 
 public class FileManager {
     private static final String FILE_PATH = "pokebattler.json";
@@ -43,18 +43,8 @@ public class FileManager {
             return valid;
         } catch (IOException e) {
             System.out.println("Kunde inte läsa JSON-filen: " + e.getMessage());
-            backupCorruptFile(file);
+            FileUtils.backupCorruptFile(file);
             return null;
-        }
-    }
-
-    private static void backupCorruptFile(File file) {
-        try {
-            Files.move(file.toPath(), new File(FILE_PATH + ".bak").toPath(),
-                    StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("Den trasiga filen sparades som " + FILE_PATH + ".bak");
-        } catch (IOException e) {
-            System.out.println("Kunde inte göra backup av den trasiga filen.");
         }
     }
 }
