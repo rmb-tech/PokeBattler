@@ -23,7 +23,7 @@ public class UIHelper {
         System.out.println("1. 📖 Pokédex");
         System.out.println("2. 🎯 Fånga ny slumpad Pokémon");
         System.out.println("3. ⚔️ Starta Strid");
-        System.out.println("4. 📊 Stridsresultat");
+        System.out.println("4. 📊 Stridsstatistik");
         System.out.println("5. 🔄 Återställ till seedat läge");
         System.out.println("6. 💾 Spara till fil");
         System.out.println("7. 🚪 Avsluta");

@@ -68,12 +68,12 @@ public abstract class Attack implements BattleAction {
         return true;
     }
 
-    public abstract String categoryLabel();            // t.ex. "Damage"
-    public abstract String effectSummary();            // t.ex. "Skada: 90"
-    public abstract String powerLabel();               // t.ex. "basskada"
+    public abstract String categoryLabel();
+    public abstract String effectSummary();
+    public abstract String powerLabel();
     public abstract int minPower();
     public abstract int maxPower();
-    public abstract void updatePower(int newPower);    // anropar rätt validerande setter
+    public abstract void updatePower(int newPower);
     public abstract Attack scaledCopy(IntUnaryOperator scaler);
 
     @Override

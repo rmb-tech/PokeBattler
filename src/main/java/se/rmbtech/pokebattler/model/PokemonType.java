@@ -21,9 +21,10 @@ public enum PokemonType {
     STEEL,
     WATER;
 
+    // Datan är hämtade från PokemonGo's wiki sida.
     private static final double SUPER_EFFECTIVE = 1.6;
     private static final double NOT_VERY_EFFECTIVE = 0.625;
-    private static final double DOUBLE_RESISTED = 0.390625;   // var 0.39
+    private static final double DOUBLE_RESISTED = 0.390625;
     private static final double NEUTRAL = 1.0;
 
     public double getMultiplierAgainst(PokemonType defenderType) {
