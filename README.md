@@ -45,6 +45,7 @@ Ett konsolbaserat Pokémon-spel där man samlar Pokémon i ett Pokédex och slå
 
 ### Statistik
 * Totala vinster och förluster, vinstprocent, resultat per stridstyp, vinst/förlust per Pokémon samt mest använda Pokémon och attack. Sparas mellan sessioner.
+* Unika Pokémon-instanser (UUID): Varje enskild Pokémon tilldelas ett unikt ID vid skapandet. Detta säkerställer att statistik (WinLossRecord) och historik sparas på id istället än enbart på namn
 
 ### Menyer
 
@@ -332,12 +333,11 @@ Efter varje **avslutad** strid sparas resultatet (avbrutna strider räknas inte)
 
 ## ⚠️ Kända begränsningar / Todo's om tid finnes
 
-* Statistik per Pokémon och per attack använder **namn** som nyckel, så två Pokémon med samma namn delar statistik.
 * Battle-loggen skrivs direkt till konsolen från `Attack.execute` och `BattleEngine`. I en vidareutveckling skulle ett lyssnar-/händelsegränssnitt skilja loggningen från spellogiken och göra den lättare att testa.
 * Slumpen (`Random`) är inte injicerbar i attackklasserna, vilket gör exakta skadevärden svåra att enhetstesta. Inga automatiska enhetstester är skrivna ännu.
 * Försvaret dras av som ett fast belopp (`försvar / 2`). Mycket svaga attacker mot Pokémon med högt försvar gör därför bara 1 skada.
 * Raid-läget kräver exakt 5 stridsdugliga Pokémon. Raid-bossar har fasta attacker och kan inte fångas.
 * Pokémon läker inte automatiskt mellan strider, utan man läker via Pokédex-menyn.
-* Ingen Pokémon kan inte levla upp 
+* Nivå- och erfarenhetsmekanik (Level-up) är ännu inte implementerat.
 * Datafilerna sparas relativt arbetsmappen, så programmet bör startas från projektets rotmapp.
 * Gränssnittet är textbaserat och förutsätter en terminal med UTF-8-stöd för emojis.
