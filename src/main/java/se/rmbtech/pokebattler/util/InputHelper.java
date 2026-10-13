@@ -41,6 +41,9 @@ public class InputHelper {
             System.out.printf("️❗Värdet måste vara mellan %d och %d.%n", min, max);
         }
     }
+    public static int readIntInRange(Scanner scanner, String label, int min, int max) {
+        return readInt(scanner, label + " (" + min + "-" + max + "): ", min, max);
+    }
 
     public static String readString(Scanner scanner, String prompt) {
         while (true) {
