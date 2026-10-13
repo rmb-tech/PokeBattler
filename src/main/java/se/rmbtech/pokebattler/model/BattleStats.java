@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.EnumMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BattleStats {
@@ -14,8 +15,10 @@ public class BattleStats {
     private int totalLosses;
     private final Map<String, WinLossRecord> pokemonRecords = new TreeMap<>();
     private final Map<String, Integer> attackUsage = new TreeMap<>();
+    private final Map<BattleMode, WinLossRecord> modeRecords = new EnumMap<>(BattleMode.class);
 
     public void registerBattle(BattleResult result) {
+        modeRecords.computeIfAbsent(result.mode(), mode -> new WinLossRecord()).add(result.playerWon());
         if (result.playerWon()) {
             totalWins++;
         } else {
@@ -65,6 +68,20 @@ public class BattleStats {
         records.forEach((name, record) -> {
             if (name != null && record != null) {
                 pokemonRecords.put(name, record);
+            }
+        });
+    }
+
+    public Map<BattleMode, WinLossRecord> getModeRecords() {
+        return Collections.unmodifiableMap(modeRecords);
+    }
+
+    public void setModeRecords(Map<BattleMode, WinLossRecord> records) {
+        modeRecords.clear();
+        if (records == null) return;
+        records.forEach((mode, record) -> {
+            if (mode != null && record != null) {
+                modeRecords.put(mode, record);
             }
         });
     }

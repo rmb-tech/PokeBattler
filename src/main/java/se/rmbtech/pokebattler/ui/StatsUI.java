@@ -24,6 +24,11 @@ public class StatsUI {
         System.out.println("Mest använda Pokémon: " + stats.findMostUsedPokemon().orElse("-"));
         System.out.println("Mest använda attack:  " + stats.findMostUsedAttack().orElse("-"));
 
+        System.out.println("\nPer stridstyp (vunna/förlorade strider):");
+        stats.getModeRecords().forEach((mode, record) ->
+                System.out.printf("  %-26s %2d V / %2d F  (%3.0f%% vinster)%n",
+                        mode.getLabel(), record.getWins(), record.getLosses(), record.winPercentage()));
+
         System.out.println("\nPer Pokémon (vunna/förlorade dueller):");
         stats.getPokemonRecords().forEach((name, record) ->
                 System.out.printf("  %-12s %2d V / %2d F  (%3.0f%% vinster)%n",
