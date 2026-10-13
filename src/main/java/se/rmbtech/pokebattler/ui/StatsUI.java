@@ -12,7 +12,7 @@ public class StatsUI {
 
     public void showStats() {
         BattleStats stats = statsService.getStats();
-        System.out.println("\n=== 📊 STRIDSSTATS ===");
+        System.out.println("\n=== 📊 STRIDSSTATISTIK ===");
 
         if (stats.totalBattles() == 0) {
             System.out.println("Inga strider har spelats än. Starta en strid så dyker statistiken upp här!");
@@ -24,14 +24,14 @@ public class StatsUI {
         System.out.println("Mest använda Pokémon: " + stats.findMostUsedPokemon().orElse("-"));
         System.out.println("Mest använda attack:  " + stats.findMostUsedAttack().orElse("-"));
 
-        System.out.println("\nPer stridstyp (vunna/förlorade strider):");
+        System.out.println("\nLäge (vunna/förlorade strider):");
         stats.getModeRecords().forEach((mode, record) ->
                 System.out.printf("  %-26s %2d V / %2d F  (%3.0f%% vinster)%n",
                         mode.getLabel(), record.getWins(), record.getLosses(), record.winPercentage()));
 
-        System.out.println("\nPer Pokémon (vunna/förlorade dueller):");
-        stats.getPokemonRecords().forEach((name, record) ->
+        System.out.println("\nPokémon (vunna/förlorade dueller):");
+        stats.getPokemonRecords().forEach((id, record) ->
                 System.out.printf("  %-12s %2d V / %2d F  (%3.0f%% vinster)%n",
-                        name, record.getWins(), record.getLosses(), record.winPercentage()));
+                        record.getPokemonName(), record.getWins(), record.getLosses(), record.winPercentage()));
     }
 }

@@ -25,8 +25,9 @@ public class BattleStats {
             totalLosses++;
         }
         for (BattleResult.DuelResult duel : result.duels()) {
-            pokemonRecords.computeIfAbsent(duel.pokemonName(), name -> new WinLossRecord())
-                    .add(duel.won());
+            WinLossRecord record = pokemonRecords.computeIfAbsent(duel.pokemonId(), id -> new WinLossRecord());
+            record.setPokemonName(duel.pokemonName()); // Säkerställer att namnet är uppdaterat
+            record.add(duel.won());
         }
         for (String attackName : result.playerAttacksUsed()) {
             attackUsage.merge(attackName, 1, Integer::sum);

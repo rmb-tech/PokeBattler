@@ -57,7 +57,7 @@ public class BattleEngine {
             System.out.println("--------------------------------------------------");
 
             boolean playerWonDuel = fightDuel(activePlayer, activeCpu, attacksUsed);
-            duels.add(new DuelResult(activePlayer.getName(), playerWonDuel));
+            duels.add(new DuelResult(activePlayer.getId(), activePlayer.getName(), playerWonDuel));
 
             if (activePlayer.isFainted()) {
                 System.out.println("\n💀 Din " + activePlayer.getName() + " svimmade!");

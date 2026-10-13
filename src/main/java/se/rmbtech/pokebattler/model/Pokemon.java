@@ -8,11 +8,13 @@ import se.rmbtech.pokebattler.exception.InvalidPokemonException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"name", "type", "maxHp", "currentHp", "defense", "speed", "attacks"})
 
 public class Pokemon {
+    private String id = UUID.randomUUID().toString();
     private String name;
     private PokemonType type;
     private int maxHp;
@@ -37,6 +39,7 @@ public class Pokemon {
     }
 
     public Pokemon(String name, PokemonType type, int maxHp, int defense, int speed, List<Attack> attacks) {
+        this.id = UUID.randomUUID().toString();
         setName(name);
         setType(type);
         setMaxHp(maxHp);
@@ -44,6 +47,12 @@ public class Pokemon {
         setDefense(defense);
         setSpeed(speed);
         setAttacks(attacks);
+    }
+
+    public void setId(String id){
+        if (id != null && !id.trim().isEmpty()) {
+            this.id = id;
+        }
     }
 
     public void setName(String name) {
@@ -144,6 +153,9 @@ public class Pokemon {
                 && attacks.stream().allMatch(a -> a != null && a.getName() != null && a.getType() != null);
     }
 
+    public String getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }

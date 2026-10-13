@@ -17,7 +17,7 @@ Ett konsolbaserat Pokémon-spel där man samlar Pokémon i ett Pokédex och slå
 7. [Statistik](#-statistik)
 8. [Felhantering och kraschtest](#-felhantering-och-kraschtest)
 9. [Uppfyllda VG-krav](#-uppfyllda-vg-krav)
-10. [Kända begränsningar](#-kända-begränsningar--todos-om-tid-finnes)
+10. [Kända begränsningar / TODO's](#-kända-begränsningar--todos-om-tid-finnes)
 
 ---
 
