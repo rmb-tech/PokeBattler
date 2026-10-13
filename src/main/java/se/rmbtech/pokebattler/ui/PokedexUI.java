@@ -55,7 +55,10 @@ public class PokedexUI {
                 switch (choice) {
                     case 1 -> pokedexSubMenu();
                     case 2 -> catchRandomPokemon();
-                    case 3 -> battleUI.startBattleMenu();
+                    case 3 -> {
+                        battleUI.startBattleMenu();
+                        FileManager.savePokemons(manager.getPokemons());
+                    }
                     case 4 -> statsUI.showStats();
                     case 5 -> resetToDefaultData();
                     case 6 -> saveToFile();
@@ -125,13 +128,8 @@ public class PokedexUI {
             System.out.printf("#%-2d %-12s │ Typ: %-10s │ HP: %3d/%-3d │ Försvar: %-3d │ Snabbhet: %-3d%n",
                     (i + 1), p.getName(), p.getType(), p.getCurrentHp(), p.getMaxHp(), p.getDefense(), p.getSpeed());
             for (Attack a : p.getAttacks()) {
-                if (a instanceof DamageAttack da) {
-                    System.out.printf("     └─ %-15s [Damage] Skada: %-3d │ Träff: %3d%% │ Typ: %s%n",
-                            da.getName(), da.getBaseDamage(), da.getAccuracy(), da.getType());
-                } else if (a instanceof StatusAttack sa) {
-                    System.out.printf("     └─ %-15s [Status] Sänker DEF: -%-2d │ Träff: %3d%% │ Typ: %s%n",
-                            sa.getName(), sa.getStatReduction(), sa.getAccuracy(), sa.getType());
-                }
+                System.out.printf("     └─ %-15s [%-6s] %-22s │ Träff: %3d%% │ Typ: %s%n",
+                        a.getName(), a.categoryLabel(), a.effectSummary(), a.getAccuracy(), a.getType());
             }
             UIHelper.printDivider();
         }
@@ -143,29 +141,16 @@ public class PokedexUI {
 
         PokemonType type = selectType("Välj Pokémon-typ:");
 
-        int maxHp = InputHelper.readInt(scanner, "Max HP (10-1000): ", 10, 1000);
-        int defense = InputHelper.readInt(scanner, "Försvar (0-100): ", 0, 100);
-        int speed = InputHelper.readInt(scanner, "Snabbhet (1-300): ", 1, 300);
+        int maxHp = InputHelper.readIntInRange(scanner, "Max HP", Pokemon.MIN_HP, Pokemon.MAX_HP);
+        int defense = InputHelper.readIntInRange(scanner, "Försvar", Pokemon.MIN_DEFENSE, Pokemon.MAX_DEFENSE);
+        int speed = InputHelper.readIntInRange(scanner, "Snabbhet", Pokemon.MIN_SPEED, Pokemon.MAX_SPEED);
 
         List<Attack> attacks = new ArrayList<>();
-        int attackCount = InputHelper.readInt(scanner, "Antal attacker (1-4): ", 1, 4);
+        int attackCount = InputHelper.readIntInRange(scanner, "Antal attacker", 1, Pokemon.MAX_ATTACKS);
 
         for (int i = 1; i <= attackCount; i++) {
             System.out.println("\n--- Attack " + i + " ---");
-            System.out.println("Välj attacktyp: 1) Skadeattack  2) Statusattack");
-            int attackTypeChoice = InputHelper.readInt(scanner, "Val: ", 1, 2);
-
-            String aName = InputHelper.readString(scanner, "Attacknamn: ");
-            int aAcc = InputHelper.readInt(scanner, "Träffsäkerhet (0-100): ", 0, 100);
-            PokemonType aType = selectType("Välj typ för attacken:");
-
-            if (attackTypeChoice == 1) {
-                int aDmg = InputHelper.readInt(scanner, "Basskada (5-250): ", 5, 250);
-                attacks.add(new DamageAttack(aName, aDmg, aAcc, aType));
-            } else {
-                int aRed = InputHelper.readInt(scanner, "Försvarssänkning (5-50): ", 5, 50);
-                attacks.add(new StatusAttack(aName, aAcc, aType, aRed));
-            }
+            attacks.add(readNewAttack("Välj typ för attacken:"));
         }
 
         Pokemon newPokemon = new Pokemon(name, type, maxHp, defense, speed, attacks);
@@ -208,17 +193,17 @@ public class PokedexUI {
                     System.out.println("✅ Typ uppdaterad till " + p.getType() + "!");
                 }
                 case 3 -> {
-                    int newHp = InputHelper.readInt(scanner, "Nytt Max HP (10-1000): ", 10, 1000);
+                    int newHp = InputHelper.readIntInRange(scanner, "Nytt Max HP", Pokemon.MIN_HP, Pokemon.MAX_HP);
                     p.setMaxHp(newHp);
                     System.out.println("✅ Max HP uppdaterat!");
                 }
                 case 4 -> {
-                    int newDefense = InputHelper.readInt(scanner, "Nytt Försvar (0-100): ", 0, 100);
+                    int newDefense = InputHelper.readIntInRange(scanner, "Nytt Försvar", Pokemon.MIN_DEFENSE, Pokemon.MAX_DEFENSE);
                     p.setDefense(newDefense);
                     System.out.println("✅ Försvar uppdaterat!");
                 }
                 case 5 -> {
-                    int newSpeed = InputHelper.readInt(scanner, "Ny Snabbhet (1-300): ", 1, 300);
+                    int newSpeed = InputHelper.readIntInRange(scanner, "Ny Snabbhet", Pokemon.MIN_SPEED, Pokemon.MAX_SPEED);
                     p.setSpeed(newSpeed);
                     System.out.println("✅ Snabbhet uppdaterad!");
                 }
@@ -234,8 +219,7 @@ public class PokedexUI {
         List<Attack> attacks = p.getAttacks();
 
         for (int i = 0; i < attacks.size(); i++) {
-            Attack a = attacks.get(i);
-            System.out.printf("%d) %s%n", (i + 1), a.toString());
+            System.out.printf("%d) %s%n", (i + 1), attacks.get(i));
         }
 
         System.out.println("\nVad vill du göra?");
@@ -248,51 +232,29 @@ public class PokedexUI {
 
         if (choice == 1) {
             int attackIndex = InputHelper.readInt(scanner, "Välj nummer på attacken du vill ändra: ", 1, attacks.size()) - 1;
-            Attack targetAttack = attacks.get(attackIndex);
+            Attack target = attacks.get(attackIndex);
 
-            System.out.println("Redigerar attack: " + targetAttack.getName());
+            System.out.println("Redigerar attack: " + target.getName());
             String newName = InputHelper.readString(scanner, "Nytt attacknamn: ");
-            int newAcc = InputHelper.readInt(scanner, "Ny träffsäkerhet (0-100): ", 0, 100);
+            int newAcc = InputHelper.readIntInRange(scanner, "Ny träffsäkerhet", Attack.MIN_ACCURACY, Attack.MAX_ACCURACY);
             PokemonType newType = selectType("Välj ny typ för attacken:");
+            int newPower = InputHelper.readIntInRange(scanner, "Ny " + target.powerLabel(), target.minPower(), target.maxPower());
 
-            targetAttack.setName(newName);
-            targetAttack.setAccuracy(newAcc);
-            targetAttack.setType(newType);
-
-            if (targetAttack instanceof DamageAttack da) {
-                int newDmg = InputHelper.readInt(scanner, "Ny basskada (5-250): ", 5, 250);
-                da.setBaseDamage(newDmg);
-            } else if (targetAttack instanceof StatusAttack sa) {
-                int newRed = InputHelper.readInt(scanner, "Ny försvarssänkning (5-50): ", 5, 50);
-                sa.setStatReduction(newRed);
-            }
+            target.setName(newName);
+            target.setAccuracy(newAcc);
+            target.setType(newType);
+            target.updatePower(newPower);
 
             p.setAttacks(attacks);
             System.out.println("✅ Attacken har uppdaterats!");
 
         } else if (choice == 2) {
-            if (attacks.size() >= 4) {
-                System.out.println("❌ Denna Pokémon har redan max antal attacker (4 st). Redigera eller ta bort en befintlig istället.");
+            if (attacks.size() >= Pokemon.MAX_ATTACKS) {
+                System.out.println("❌ Denna Pokémon har redan max antal attacker ("+ Pokemon.MAX_ATTACKS + "st). Redigera eller ta bort en befintlig istället.");
                 return;
             }
-
             System.out.println("--- LÄGG TILL NY ATTACK ---");
-            System.out.println("Välj attacktyp: 1) Skadeattack  2) Statusattack");
-            int attackTypeChoice = InputHelper.readInt(scanner, "Val: ", 1, 2);
-
-            String aName = InputHelper.readString(scanner, "Attacknamn: ");
-            int aAcc = InputHelper.readInt(scanner, "Träffsäkerhet (0-100): ", 0, 100);
-            PokemonType aType = selectType("Välj typ för den nya attacken:");
-
-            Attack newAttack;
-            if (attackTypeChoice == 1) {
-                int aDmg = InputHelper.readInt(scanner, "Basskada (5-250): ", 5, 250);
-                newAttack = new DamageAttack(aName, aDmg, aAcc, aType);
-            } else {
-                int aRed = InputHelper.readInt(scanner, "Försvarssänkning (5-50): ", 5, 50);
-                newAttack = new StatusAttack(aName, aAcc, aType, aRed);
-            }
-
+            Attack newAttack = readNewAttack("Välj typ för den nya attacken:");
             try {
                 p.addAttack(newAttack);
                 System.out.println("✅ Ny attack tillagd!");
@@ -305,15 +267,27 @@ public class PokedexUI {
                 System.out.println("❌ En Pokémon måste ha minst 1 attack! Det går inte att ta bort den sista.");
                 return;
             }
-
             int attackIndex = InputHelper.readInt(scanner, "Välj nummer på attacken du vill ta bort: ", 1, attacks.size()) - 1;
-            Attack removedAttack = attacks.remove(attackIndex);
-
+            Attack removed = attacks.remove(attackIndex);
             p.setAttacks(attacks);
-            System.out.println("✅ Attacken '" + removedAttack.getName() + "' har tagits bort!");
+            System.out.println("✅ Attacken '" + removed.getName() + "' har tagits bort!");
         }
     }
+    private Attack readNewAttack(String typePrompt) {
+        System.out.println("Välj attacktyp: 1) Skadeattack  2) Statusattack");
+        int kind = InputHelper.readInt(scanner, "Val: ", 1, 2);
 
+        String name = InputHelper.readString(scanner, "Attacknamn: ");
+        int accuracy = InputHelper.readIntInRange(scanner, "Träffsäkerhet", Attack.MIN_ACCURACY, Attack.MAX_ACCURACY);
+        PokemonType type = selectType(typePrompt);
+
+        if (kind == 1) {
+            int damage = InputHelper.readIntInRange(scanner, "Basskada", DamageAttack.MIN_DAMAGE, DamageAttack.MAX_DAMAGE);
+            return new DamageAttack(name, damage, accuracy, type);
+        }
+        int reduction = InputHelper.readIntInRange(scanner, "Försvarssänkning", StatusAttack.MIN_REDUCTION, StatusAttack.MAX_REDUCTION);
+        return new StatusAttack(name, accuracy, type, reduction);
+    }
     private void removePokemon() {
         listPokemons();
         if (manager.getPokemons().isEmpty()) return;

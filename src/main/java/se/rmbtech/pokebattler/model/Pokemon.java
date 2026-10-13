@@ -20,6 +20,14 @@ public class Pokemon {
     private int defense; // aktuellt försvar (kan sänkas i strid)
     private int baseDefense; // permanent försvar, återställs efter strid
     private int speed;
+    public static final int MIN_HP = 10;
+    public static final int MAX_HP = 1000;
+    public static final int MIN_DEFENSE = 0;
+    public static final int MAX_DEFENSE = 100;
+    public static final int MIN_SPEED = 1;
+    public static final int MAX_SPEED = 300;
+    public static final int MIN_ATTACKS = 1;
+    public static final int MAX_ATTACKS = 4;
     private List<Attack> attacks;
     private boolean statLowered = false;
 
@@ -53,8 +61,8 @@ public class Pokemon {
     }
 
     public void setMaxHp(int maxHp) {
-        if (maxHp < 10 || maxHp > 1000) {
-            throw new InvalidPokemonException("Max HP måste vara mellan 10 och 1000.");
+        if (maxHp < MIN_HP || maxHp > MAX_HP) {
+            throw new InvalidPokemonException("Max HP måste vara mellan " + MIN_HP + " och " + MAX_HP + ".");
         }
         this.maxHp = maxHp;
         this.currentHp = Math.min(this.currentHp, maxHp);
@@ -65,8 +73,8 @@ public class Pokemon {
     }
 
     public void setDefense(int defense) {
-        if (defense < 0 || defense > 100) {
-            throw new InvalidPokemonException("Försvar (Defense) måste vara mellan 0 och 100.");
+        if (defense < MIN_DEFENSE || defense > MAX_DEFENSE) {
+            throw new InvalidPokemonException("Försvar (Defense) måste vara mellan " + MIN_DEFENSE + " och " + MAX_DEFENSE + ".");
         }
         this.defense = defense;
         this.baseDefense = defense;
@@ -83,15 +91,15 @@ public class Pokemon {
     }
 
     public void setSpeed(int speed) {
-        if (speed < 1 || speed > 300) {
-            throw new InvalidPokemonException("Snabbhet (Speed) måste vara mellan 1 och 300.");
+        if (speed < MIN_SPEED || speed > MAX_SPEED) {
+            throw new InvalidPokemonException("Snabbhet (Speed) måste vara mellan " + MIN_SPEED + " och " + MAX_SPEED + ".");
         }
         this.speed = speed;
     }
 
     public void setAttacks(List<Attack> attacks) {
-        if (attacks == null || attacks.isEmpty() || attacks.size() > 4) {
-            throw new InvalidPokemonException("En Pokémon måste ha mellan 1 och 4 attacker.");
+        if (attacks == null || attacks.isEmpty() || attacks.size() > MAX_ATTACKS) {
+            throw new InvalidPokemonException("En Pokémon måste ha mellan 1 och " + MAX_ATTACKS + " attacker.");
         }
         this.attacks = new ArrayList<>(attacks);
     }

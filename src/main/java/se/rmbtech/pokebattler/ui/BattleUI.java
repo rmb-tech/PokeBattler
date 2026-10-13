@@ -1,5 +1,6 @@
 package se.rmbtech.pokebattler.ui;
 
+import se.rmbtech.pokebattler.model.BattleMode;
 import se.rmbtech.pokebattler.model.BattleResult;
 import se.rmbtech.pokebattler.model.Pokemon;
 import se.rmbtech.pokebattler.service.*;
@@ -38,43 +39,39 @@ public class BattleUI {
         }
 
         System.out.println("\n=== ⚔️ STRIDSLÄGE ⚔️ ===");
-        System.out.println("1) 1v1 Strid");
-        System.out.println("2) 3v3 Lagstrid");
-        System.out.println("3) RAID (5v1 mot Raid-boss)");
-        int mode = InputHelper.readInt(scanner, "Välj typ av strid: ", 1, 3);
+        BattleMode[] modes = BattleMode.values();
 
-        int teamSize;
-        if (mode == 1) {
-            teamSize = 1;
-        } else if (mode == 2) {
-            teamSize = 3;
-        } else {
-            teamSize = 5;
+        for (int i = 0; i < modes.length; i++) {
+            System.out.printf("%d) %s%n", i + 1, modes[i].getLabel());
         }
+        BattleMode mode = modes[InputHelper.readInt(scanner, "Välj typ av strid: ", 1, modes.length) - 1];
 
+        int teamSize = mode.getPlayerTeamSize();
         if (readyPokemons.size() < teamSize) {
             System.out.println("❌ Du behöver minst " + teamSize + " frisk(a) Pokémon i ditt Pokédex för detta läge!");
             return;
         }
 
         List<Pokemon> playerTeam = selectPlayerTeam(readyPokemons, teamSize);
+        List<Pokemon> cpuTeam = createCpuTeam(mode);
 
-        List<Pokemon> cpuTeam;
-        if (mode == 3) {
-            Pokemon boss = RaidDataSeeder.getRandomRaidBoss();
-            System.out.printf("\n🚨 EN EPISK RAID-BOSS DYKER UPP: %s (HP: %d)!\n", boss.getName(), boss.getMaxHp());
-            cpuTeam = List.of(boss);
-        } else {
-            cpuTeam = new ArrayList<>();
-            for (int i = 0; i < teamSize; i++) {
-                cpuTeam.add(PokemonDataSeeder.getRandomSeedPokemon());
-            }
-        }
-
-        BattleEngine engine = new BattleEngine(scanner);
-        BattleResult result = engine.startTeamBattle(playerTeam, cpuTeam);
+        BattleEngine engine = new BattleEngine(new PlayerAttackChooser(scanner), new CpuAttackChooser());
+        BattleResult result = engine.startBattle(mode, playerTeam, cpuTeam);
         statsService.recordBattle(result);
         System.out.println("📊 Resultatet har sparats i statistiken.");
+    }
+
+    private List<Pokemon> createCpuTeam(BattleMode mode) {
+        if (mode == BattleMode.RAID) {
+            Pokemon boss = RaidDataSeeder.getRandomRaidBoss();
+            System.out.printf("%n🚨 EN EPISK RAID-BOSS DYKER UPP: %s (HP: %d)!%n", boss.getName(), boss.getMaxHp());
+            return List.of(boss);
+        }
+        List<Pokemon> team = new ArrayList<>();
+        for (int i = 0; i < mode.getCpuTeamSize(); i++) {
+            team.add(PokemonDataSeeder.getRandomSeedPokemon());
+        }
+        return team;
     }
 
     private List<Pokemon> selectPlayerTeam(List<Pokemon> readyPokemons, int teamSize) {

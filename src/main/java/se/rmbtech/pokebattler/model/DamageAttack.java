@@ -5,9 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import se.rmbtech.pokebattler.exception.InvalidPokemonException;
 
 import java.util.Random;
+import java.util.function.IntUnaryOperator;
 
 public class DamageAttack extends Attack {
+    public static final int MIN_DAMAGE = 5;
+    public static final int MAX_DAMAGE = 250;
+    private static final int CRIT_CHANCE_PERCENT = 10;
+    private static final double CRIT_MULTIPLIER = 1.5;
     private static final Random random = new Random();
+
     private int baseDamage;
 
     @JsonCreator
@@ -25,8 +31,9 @@ public class DamageAttack extends Attack {
     }
 
     public void setBaseDamage(int baseDamage) {
-        if (baseDamage < 5 || baseDamage > 250) {
-            throw new InvalidPokemonException("Basskada måste vara mellan 5 och 250.");
+        if (baseDamage < MIN_DAMAGE || baseDamage > MAX_DAMAGE) {
+            throw new InvalidPokemonException(
+                    "Basskada måste vara mellan " + MIN_DAMAGE + " och " + MAX_DAMAGE + ".");
         }
         this.baseDamage = baseDamage;
     }
@@ -42,9 +49,10 @@ public class DamageAttack extends Attack {
             return;
         }
 
-        boolean isCritical = random.nextInt(100) < 10;
-        double critMultiplier = isCritical ? 1.5 : 1.0;
         double typeMultiplier = getType().getMultiplierAgainst(defender.getType());
+
+        boolean isCritical = random.nextInt(100) < CRIT_CHANCE_PERCENT;
+        double critMultiplier = isCritical ? CRIT_MULTIPLIER : 1.0;
 
         int blockedDamage = defender.getDefense() / 2;
         int rawDamage = (int) Math.round((baseDamage - blockedDamage) * typeMultiplier * critMultiplier);
@@ -62,9 +70,16 @@ public class DamageAttack extends Attack {
         System.out.println(log);
     }
 
+    @Override public String categoryLabel() { return "Damage"; }
+    @Override public String effectSummary() { return "Skada: " + baseDamage; }
+    @Override public String powerLabel() { return "basskada"; }
+    @Override public int minPower() { return MIN_DAMAGE; }
+    @Override public int maxPower() { return MAX_DAMAGE; }
+    @Override public void updatePower(int newPower) { setBaseDamage(newPower); }
+
     @Override
-    public String toString() {
-        return String.format("%s (Skada: %d, Träff: %d%%, Typ: %s)",
-                getName(), baseDamage, getAccuracy(), getType());
+    public Attack scaledCopy(IntUnaryOperator scaler) {
+        int scaled = Math.clamp(scaler.applyAsInt(baseDamage), MIN_DAMAGE, MAX_DAMAGE);
+        return new DamageAttack(getName(), scaled, getAccuracy(), getType());
     }
 }

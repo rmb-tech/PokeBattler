@@ -19,16 +19,9 @@ public class PokemonDataSeeder {
         int defense = Math.clamp(applyVariance(baseDefense), 0, 100);
         int speed = Math.clamp(applyVariance(baseSpeed), 1, 300);
 
-        List<Attack> variedAttacks = new ArrayList<>();
-        for (Attack a : attacks) {
-            if (a instanceof DamageAttack da) {
-                int variedDamage = Math.clamp(applyVariance(da.getBaseDamage()), 5, 250);
-                variedAttacks.add(new DamageAttack(da.getName(), variedDamage, da.getAccuracy(), da.getType()));
-            } else if (a instanceof StatusAttack sa) {
-                int variedReduction = Math.clamp(applyVariance(sa.getStatReduction()), 5, 50);
-                variedAttacks.add(new StatusAttack(sa.getName(), sa.getAccuracy(), sa.getType(), variedReduction));
-            }
-        }
+        List<Attack> variedAttacks = attacks.stream()
+                .map(a -> a.scaledCopy(PokemonDataSeeder::applyVariance))
+                .toList();
 
         return new Pokemon(name, type, hp, defense, speed, variedAttacks);
     }

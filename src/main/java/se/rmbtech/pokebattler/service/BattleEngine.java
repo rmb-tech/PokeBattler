@@ -1,37 +1,42 @@
 package se.rmbtech.pokebattler.service;
 
 import se.rmbtech.pokebattler.model.Attack;
+import se.rmbtech.pokebattler.model.BattleMode;
 import se.rmbtech.pokebattler.model.BattleResult;
 import se.rmbtech.pokebattler.model.BattleResult.DuelResult;
 import se.rmbtech.pokebattler.model.Pokemon;
-import se.rmbtech.pokebattler.model.StatusAttack;
-import se.rmbtech.pokebattler.util.InputHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
 public class BattleEngine {
     private static final int MAX_ROUNDS = 30;
 
-    private final Scanner scanner;
-    private final Random random = new Random();
+    private final AttackChooser playerChooser;
+    private final AttackChooser cpuChooser;
+    private final Random random;
 
-    public BattleEngine(Scanner scanner) {
-        this.scanner = scanner;
+    public BattleEngine(AttackChooser playerChooser, AttackChooser cpuChooser) {
+        this(playerChooser, cpuChooser, new Random());
     }
 
-    public BattleResult startTeamBattle(List<Pokemon> playerTeam, List<Pokemon> cpuTeam) {
+    public BattleEngine(AttackChooser playerChooser, AttackChooser cpuChooser, Random random) {
+        this.playerChooser = playerChooser;
+        this.cpuChooser = cpuChooser;
+        this.random = random;
+    }
+
+    public BattleResult startBattle(BattleMode mode, List<Pokemon> playerTeam, List<Pokemon> cpuTeam) {
         try {
-            return runTeamBattle(playerTeam, cpuTeam);
+            return runBattle(mode, playerTeam, cpuTeam);
         } finally {
             playerTeam.forEach(Pokemon::resetBattleStats);
             cpuTeam.forEach(Pokemon::resetBattleStats);
         }
     }
 
-    private BattleResult runTeamBattle(List<Pokemon> playerTeam, List<Pokemon> cpuTeam) {
+    private BattleResult runBattle(BattleMode mode, List<Pokemon> playerTeam, List<Pokemon> cpuTeam) {
         List<DuelResult> duels = new ArrayList<>();
         List<String> attacksUsed = new ArrayList<>();
         int playerIdx = 0;
@@ -79,7 +84,7 @@ public class BattleEngine {
                 : "☠️ ALLA DINA POKÉMON HAR SVIMMAT. DU FÖRLORADE!");
         System.out.println("==================================================");
 
-        return new BattleResult(playerWon, duels, attacksUsed);
+        return new BattleResult(mode, playerWon, duels, attacksUsed);
     }
 
     /** Returnerar true om spelarens Pokémon vann duellen. */
@@ -91,22 +96,28 @@ public class BattleEngine {
                 break;
             }
 
-            boolean playerFirst = determineTurnOrder(player, cpu);
-
-            if (playerFirst) {
-                executePlayerTurn(player, cpu, attacksUsed);
+            if (determineTurnOrder(player, cpu)) {
+                attacksUsed.add(takeTurn(player, cpu, playerChooser).getName());
                 if (!cpu.isFainted()) {
-                    executeCpuTurn(cpu, player);
+                    takeTurn(cpu, player, cpuChooser);
                 }
             } else {
                 System.out.println("⚡ Vild " + cpu.getName() + " var snabbare och attackerar först!");
-                executeCpuTurn(cpu, player);
+                takeTurn(cpu, player, cpuChooser);
                 if (!player.isFainted()) {
-                    executePlayerTurn(player, cpu, attacksUsed);
+                    attacksUsed.add(takeTurn(player, cpu, playerChooser).getName());
                 }
             }
         }
         return cpu.isFainted();
+    }
+
+    /** En tur för vem som helst: valet delegeras till rätt AttackChooser. */
+    private Attack takeTurn(Pokemon attacker, Pokemon defender, AttackChooser chooser) {
+        Attack attack = chooser.chooseAttack(attacker, defender);
+        System.out.println(attacker.getName() + " använder " + attack.getName() + "!");
+        attack.execute(attacker, defender);
+        return attack;
     }
 
     private void resolveStalemate(Pokemon player, Pokemon cpu) {
@@ -124,41 +135,5 @@ public class BattleEngine {
         if (player.getSpeed() > cpu.getSpeed()) return true;
         if (cpu.getSpeed() > player.getSpeed()) return false;
         return random.nextBoolean();
-    }
-
-    private void executePlayerTurn(Pokemon attacker, Pokemon defender, List<String> attacksUsed) {
-        System.out.println("\n--- DIN TUR (" + attacker.getName() + ") ---");
-        List<Attack> attacks = attacker.getAttacks();
-
-        for (int i = 0; i < attacks.size(); i++) {
-            System.out.printf("%d) %s%n", (i + 1), attacks.get(i));
-        }
-
-        int choice = InputHelper.readInt(scanner, "Välj attack: ", 1, attacks.size()) - 1;
-        Attack attack = attacks.get(choice);
-
-        attacksUsed.add(attack.getName());
-        performAttack(attacker, defender, attack);
-    }
-
-    private void executeCpuTurn(Pokemon attacker, Pokemon defender) {
-        List<Attack> attacks = attacker.getAttacks();
-        List<Attack> validAttacks = attacks.stream()
-                .filter(a -> !(a instanceof StatusAttack && defender.isStatLowered()))
-                .toList();
-
-        if (validAttacks.isEmpty()) {
-            validAttacks = attacks;
-        }
-
-        Attack attack = validAttacks.get(random.nextInt(validAttacks.size()));
-
-        System.out.println("\n--- MOTSTÅNDARENS TUR ---");
-        performAttack(attacker, defender, attack);
-    }
-
-    private void performAttack(Pokemon attacker, Pokemon defender, Attack attack) {
-        System.out.println(attacker.getName() + " använder " + attack.getName() + "!");
-        attack.execute(attacker, defender);
     }
 }

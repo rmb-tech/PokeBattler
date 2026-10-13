@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import se.rmbtech.pokebattler.exception.InvalidPokemonException;
 
+import java.util.function.IntUnaryOperator;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(
@@ -22,9 +23,11 @@ public abstract class Attack implements BattleAction {
     private String name;
     private int accuracy;
     private PokemonType type;
+    public static final int MIN_ACCURACY = 0;
+    public static final int MAX_ACCURACY = 100;
 
     @JsonCreator
-    protected Attack(){}
+    protected Attack() {}
 
     public Attack(String name, int accuracy, PokemonType type) {
         setName(name);
@@ -47,22 +50,34 @@ public abstract class Attack implements BattleAction {
     }
 
     public void setAccuracy(int accuracy) {
-        if (accuracy < 0 || accuracy > 100) {
-            throw new InvalidPokemonException("Träffsäkerhet måste vara mellan 0 och 100.");
+        if (accuracy < MIN_ACCURACY || accuracy > MAX_ACCURACY) {
+            throw new InvalidPokemonException("Träffsäkerhet måste vara mellan " + MIN_ACCURACY +" och " + MAX_ACCURACY + "-");
         }
         this.accuracy = accuracy;
     }
 
-    public String getName() {
-        return name;
-    }
-    public int getAccuracy() {
-        return accuracy;
-    }
-    public PokemonType getType() {
-        return type;
-    }
+    public String getName() { return name; }
+    public int getAccuracy() { return accuracy; }
+    public PokemonType getType() { return type; }
+
 
     @Override
     public abstract void execute(Pokemon attacker, Pokemon defender);
+
+    public boolean isUsefulAgainst(Pokemon defender) {
+        return true;
+    }
+
+    public abstract String categoryLabel();            // t.ex. "Damage"
+    public abstract String effectSummary();            // t.ex. "Skada: 90"
+    public abstract String powerLabel();               // t.ex. "basskada"
+    public abstract int minPower();
+    public abstract int maxPower();
+    public abstract void updatePower(int newPower);    // anropar rätt validerande setter
+    public abstract Attack scaledCopy(IntUnaryOperator scaler);
+
+    @Override
+    public String toString() {
+        return String.format("%s (%s, Träff: %d%%, Typ: %s)", name, effectSummary(), accuracy, type);
+    }
 }
