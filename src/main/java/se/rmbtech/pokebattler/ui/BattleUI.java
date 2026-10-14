@@ -3,7 +3,12 @@ package se.rmbtech.pokebattler.ui;
 import se.rmbtech.pokebattler.model.BattleMode;
 import se.rmbtech.pokebattler.model.BattleResult;
 import se.rmbtech.pokebattler.model.Pokemon;
-import se.rmbtech.pokebattler.service.*;
+import se.rmbtech.pokebattler.service.BattleEngine;
+import se.rmbtech.pokebattler.service.CpuAttackChooser;
+import se.rmbtech.pokebattler.service.PokedexService;
+import se.rmbtech.pokebattler.service.PokemonDataSeeder;
+import se.rmbtech.pokebattler.service.RaidDataSeeder;
+import se.rmbtech.pokebattler.service.StatsService;
 import se.rmbtech.pokebattler.util.InputHelper;
 
 import java.util.ArrayList;
@@ -12,17 +17,17 @@ import java.util.Scanner;
 
 public class BattleUI {
     private final Scanner scanner;
-    private final PokedexService manager;
+    private final PokedexService service;
     private final StatsService statsService;
 
-    public BattleUI(Scanner scanner, PokedexService manager, StatsService statsService) {
+    public BattleUI(Scanner scanner, PokedexService service, StatsService statsService) {
         this.scanner = scanner;
-        this.manager = manager;
+        this.service = service;
         this.statsService = statsService;
     }
 
     public void startBattleMenu() {
-        List<Pokemon> allPokemons = manager.getPokemons();
+        List<Pokemon> allPokemons = service.getPokemons();
         if (allPokemons.isEmpty()) {
             System.out.println("❌ Du äger inga Pokémon! Fånga eller lägg till en först.");
             return;
@@ -80,7 +85,7 @@ public class BattleUI {
 
         for (int i = 0; i < readyPokemons.size(); i++) {
             Pokemon p = readyPokemons.get(i);
-            System.out.printf("#%-2d %-12s │ HP: %3d/%-3d │ Defense: %-3d │ Speed: %-3d%n",
+            System.out.printf("#%-2d %-22s │ HP: %3d/%-3d │ Försvar: %-3d │ Snabbhet: %-3d%n",
                     (i + 1), p.getDisplayName(), p.getCurrentHp(), p.getMaxHp(), p.getDefense(), p.getSpeed());
         }
 

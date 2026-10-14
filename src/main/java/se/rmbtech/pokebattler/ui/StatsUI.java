@@ -1,7 +1,10 @@
 package se.rmbtech.pokebattler.ui;
 
 import se.rmbtech.pokebattler.model.BattleStats;
+import se.rmbtech.pokebattler.model.PokemonRecord;
 import se.rmbtech.pokebattler.service.StatsService;
+
+import java.util.Comparator;
 
 public class StatsUI {
     private final StatsService statsService;
@@ -30,10 +33,11 @@ public class StatsUI {
                         mode.getLabel(), record.getWins(), record.getLosses(), record.winPercentage()));
 
         System.out.println("\nPokémon (vunna/förlorade dueller):");
-        stats.getPokemonRecords().forEach((id, record) -> {
-            String displayName = record.getPokemonName() + " (IV " + record.getPotential() + "%)";
-            System.out.printf("  %-18s %2d V / %2d F  (%3.0f%% vinster)%n",
-                    displayName, record.getWins(), record.getLosses(), record.winPercentage());
-        });
+        stats.getPokemonRecords().values().stream()
+                .sorted(Comparator.comparingInt(PokemonRecord::timesUsed).reversed()
+                        .thenComparing(PokemonRecord::getPokemonName,
+                                Comparator.nullsFirst(Comparator.naturalOrder())))
+                .forEach(r -> System.out.printf("  %-22s %2d V / %2d F  (%3.0f%% vinster)%n",
+                        r.displayName(), r.getWins(), r.getLosses(), r.winPercentage()));
     }
 }

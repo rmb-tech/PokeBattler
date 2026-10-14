@@ -5,7 +5,9 @@ import se.rmbtech.pokebattler.exception.InputCancelledException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class InputHelper {
+public final class InputHelper {
+
+    private InputHelper() {}
 
     private static String nextLine(Scanner scanner) {
         try {
@@ -21,7 +23,7 @@ public class InputHelper {
             String input = nextLine(scanner);
 
             if (input.isEmpty()) {
-                System.out.println("❗Ogiltig input.. Skriv ett heltal");
+                System.out.println("❗Ogiltig input. Skriv ett heltal");
                 continue;
             }
             try {
@@ -38,9 +40,10 @@ public class InputHelper {
             if (value >= min && value <= max) {
                 return value;
             }
-            System.out.printf("️❗Värdet måste vara mellan %d och %d.%n", min, max);
+            System.out.printf("❗Värdet måste vara mellan %d och %d.%n", min, max);
         }
     }
+
     public static int readIntInRange(Scanner scanner, String label, int min, int max) {
         return readInt(scanner, label + " (" + min + "-" + max + "): ", min, max);
     }

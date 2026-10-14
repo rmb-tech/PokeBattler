@@ -4,16 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.EnumMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BattleStats {
     private int totalWins;
     private int totalLosses;
-    private final Map<String, WinLossRecord> pokemonRecords = new TreeMap<>();
+    private final Map<String, PokemonRecord> pokemonRecords = new TreeMap<>();
     private final Map<String, Integer> attackUsage = new TreeMap<>();
     private final Map<BattleMode, WinLossRecord> modeRecords = new EnumMap<>(BattleMode.class);
 
@@ -25,7 +25,7 @@ public class BattleStats {
             totalLosses++;
         }
         for (BattleResult.DuelResult duel : result.duels()) {
-            WinLossRecord record = pokemonRecords.computeIfAbsent(duel.pokemonId(), id -> new WinLossRecord());
+            PokemonRecord record = pokemonRecords.computeIfAbsent(duel.pokemonId(), id -> new PokemonRecord());
             record.setPokemonName(duel.pokemonName());
             record.setPotential(duel.potential());
             record.add(duel.won());
@@ -40,7 +40,7 @@ public class BattleStats {
     }
 
     public double winPercentage() {
-        return totalBattles() == 0 ? 0 : totalWins * 100.0 / totalBattles();
+        return totalBattles() == 0 ? 0 : (totalWins * 100.0) / totalBattles();
     }
 
     public Optional<String> findMostUsedAttack() {
@@ -51,8 +51,10 @@ public class BattleStats {
 
     public Optional<String> findMostUsedPokemon() {
         return pokemonRecords.values().stream()
-                .max(Comparator.comparingInt(WinLossRecord::timesUsed))
-                .map(record -> record.getPokemonName() + " (IV " + record.getPotential() + "%)");
+                .max(Comparator.comparingInt(PokemonRecord::timesUsed)
+                        .thenComparing(PokemonRecord::getPokemonName,
+                                Comparator.nullsFirst(Comparator.reverseOrder())))
+                .map(PokemonRecord::displayName);
     }
 
     public int getTotalWins() {
@@ -71,11 +73,11 @@ public class BattleStats {
         this.totalLosses = Math.max(0, totalLosses);
     }
 
-    public Map<String, WinLossRecord> getPokemonRecords() {
+    public Map<String, PokemonRecord> getPokemonRecords() {
         return Collections.unmodifiableMap(pokemonRecords);
     }
 
-    public void setPokemonRecords(Map<String, WinLossRecord> records) {
+    public void setPokemonRecords(Map<String, PokemonRecord> records) {
         pokemonRecords.clear();
         if (records == null) return;
         records.forEach((name, record) -> {

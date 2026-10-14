@@ -87,12 +87,11 @@ public class BattleEngine {
         return new BattleResult(mode, playerWon, duels, attacksUsed);
     }
 
-    /** Returnerar true om spelarens Pokémon vann duellen. */
     private boolean fightDuel(Pokemon player, Pokemon cpu, List<String> attacksUsed) {
         int round = 0;
         while (!player.isFainted() && !cpu.isFainted()) {
             if (round++ >= MAX_ROUNDS) {
-                resolveStalemate(player, cpu);
+                resolveStalemate(player);
                 break;
             }
 
@@ -112,7 +111,6 @@ public class BattleEngine {
         return cpu.isFainted();
     }
 
-    /** En tur för vem som helst: valet delegeras till rätt AttackChooser. */
     private Attack takeTurn(Pokemon attacker, Pokemon defender, AttackChooser chooser) {
         Attack attack = chooser.chooseAttack(attacker, defender);
         System.out.println(attacker.getName() + " använder " + attack.getName() + "!");
@@ -120,15 +118,10 @@ public class BattleEngine {
         return attack;
     }
 
-    private void resolveStalemate(Pokemon player, Pokemon cpu) {
-        System.out.printf("%n⏱️ Dödläge efter %d rundor! Den med högst HP-procent vinner duellen.%n", MAX_ROUNDS);
-        double playerRatio = (double) player.getCurrentHp() / player.getMaxHp();
-        double cpuRatio = (double) cpu.getCurrentHp() / cpu.getMaxHp();
-        if (playerRatio > cpuRatio) {
-            cpu.takeDamage(cpu.getCurrentHp());
-        } else {
-            player.takeDamage(player.getCurrentHp());
-        }
+    private void resolveStalemate(Pokemon player) {
+        System.out.printf("%n⏱️ Dödläge efter %d rundor! %s är utmattad och räknas som besegrad.%n",
+                MAX_ROUNDS, player.getName());
+        player.takeDamage(player.getCurrentHp());
     }
 
     private boolean determineTurnOrder(Pokemon player, Pokemon cpu) {

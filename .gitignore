@@ -37,3 +37,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Datafiles created after first run ###
+pokebattler.json
+battle-stats.json
+*.bak

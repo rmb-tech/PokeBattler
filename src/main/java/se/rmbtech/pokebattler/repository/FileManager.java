@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class FileManager {
+public final class FileManager {
     private static final String FILE_PATH = "pokebattler.json";
     private static final ObjectMapper mapper = new ObjectMapper();
+
+    private FileManager() {}
 
     public static void savePokemons(List<Pokemon> pokemons) {
         try {
@@ -37,8 +39,15 @@ public class FileManager {
             }
             List<Pokemon> valid = new ArrayList<>(
                     loaded.stream().filter(Objects::nonNull).filter(Pokemon::isComplete).toList());
-            if (valid.size() != loaded.size()) {
-                System.out.println("⚠️ " + (loaded.size() - valid.size()) + " ofullständig(a) Pokémon hoppades över.");
+            int skipped = loaded.size() - valid.size();
+            if (skipped > 0) {
+                System.out.println("❌ " + skipped + " ofullständig(a) Pokémon hoppades över.");
+            }
+
+            if (!loaded.isEmpty() && valid.isEmpty()) {
+                System.out.println("❗Alla Pokémon i filen var ofullständiga. Skapar backup.");
+                FileUtils.backupCorruptFile(file);
+                return null;
             }
             return valid;
         } catch (IOException e) {

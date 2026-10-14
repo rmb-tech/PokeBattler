@@ -15,7 +15,7 @@ public class PokedexService {
     }
 
     public void setPokemons(List<Pokemon> pokemons) {
-        this.pokemons = pokemons;
+        this.pokemons = new ArrayList<>(pokemons);
     }
 
     public void addPokemon(Pokemon p) {

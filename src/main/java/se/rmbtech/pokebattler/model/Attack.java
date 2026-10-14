@@ -51,7 +51,7 @@ public abstract class Attack implements BattleAction {
 
     public void setAccuracy(int accuracy) {
         if (accuracy < MIN_ACCURACY || accuracy > MAX_ACCURACY) {
-            throw new InvalidPokemonException("Träffsäkerhet måste vara mellan " + MIN_ACCURACY +" och " + MAX_ACCURACY + "-");
+            throw new InvalidPokemonException("Träffsäkerhet måste vara mellan " + MIN_ACCURACY +" och " + MAX_ACCURACY + ".");
         }
         this.accuracy = accuracy;
     }

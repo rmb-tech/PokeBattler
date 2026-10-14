@@ -1,13 +1,19 @@
 package se.rmbtech.pokebattler.service;
 
-import se.rmbtech.pokebattler.model.*;
+import se.rmbtech.pokebattler.model.Attack;
+import se.rmbtech.pokebattler.model.DamageAttack;
+import se.rmbtech.pokebattler.model.Pokemon;
+import se.rmbtech.pokebattler.model.PokemonType;
+import se.rmbtech.pokebattler.model.StatusAttack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class PokemonDataSeeder {
+public final class PokemonDataSeeder {
     private static final Random random = new Random();
+
+    private PokemonDataSeeder(){}
 
     private static int applyVariance(int baseValue, double factor) {
         return (int) Math.round(baseValue * factor);
@@ -19,9 +25,9 @@ public class PokemonDataSeeder {
         int potential = (int) Math.round(((factor - 0.80) / 0.40) * 100);
         potential = Math.clamp(potential, 0, 100);
 
-        int hp = Math.clamp(applyVariance(baseHp, factor), 10, 1000);
-        int defense = Math.clamp(applyVariance(baseDefense, factor), 0, 100);
-        int speed = Math.clamp(applyVariance(baseSpeed, factor), 1, 300);
+        int hp = Math.clamp(applyVariance(baseHp, factor), Pokemon.MIN_HP, Pokemon.MAX_HP);
+        int defense = Math.clamp(applyVariance(baseDefense, factor), Pokemon.MIN_DEFENSE, Pokemon.MAX_DEFENSE);
+        int speed = Math.clamp(applyVariance(baseSpeed, factor), Pokemon.MIN_SPEED, Pokemon.MAX_SPEED);
 
         List<Attack> variedAttacks = attacks.stream()
                 .map(a -> a.scaledCopy(baseVal -> applyVariance(baseVal, factor)))

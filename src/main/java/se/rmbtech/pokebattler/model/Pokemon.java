@@ -11,9 +11,20 @@ import java.util.List;
 import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"name", "type", "maxHp", "currentHp", "defense", "speed", "attacks"})
+@JsonPropertyOrder({"name", "type", "maxHp", "currentHp", "defense", "speed", "potential", "attacks"})
 
 public class Pokemon {
+    public static final int MIN_HP = 10;
+    public static final int MAX_HP = 1000;
+    public static final int MIN_DEFENSE = 0;
+    public static final int MAX_DEFENSE = 100;
+    public static final int MIN_SPEED = 1;
+    public static final int MAX_SPEED = 200;
+    public static final int MIN_ATTACKS = 1;
+    public static final int MAX_ATTACKS = 4;
+    public static final int MIN_POTENTIAL = 0;
+    public static final int MAX_POTENTIAL = 100;
+
     private String id = UUID.randomUUID().toString();
     private String name;
     private PokemonType type;
@@ -23,14 +34,6 @@ public class Pokemon {
     private int baseDefense; // permanent försvar, återställs efter strid
     private int speed;
     private int potential;
-    public static final int MIN_HP = 10;
-    public static final int MAX_HP = 1000;
-    public static final int MIN_DEFENSE = 0;
-    public static final int MAX_DEFENSE = 100;
-    public static final int MIN_SPEED = 1;
-    public static final int MAX_SPEED = 300;
-    public static final int MIN_ATTACKS = 1;
-    public static final int MAX_ATTACKS = 4;
     private List<Attack> attacks;
     private boolean statLowered = false;
 
@@ -40,7 +43,6 @@ public class Pokemon {
     }
 
     public Pokemon(String name, PokemonType type, int maxHp, int defense, int speed, List<Attack> attacks) {
-        this.id = UUID.randomUUID().toString();
         setName(name);
         setType(type);
         setMaxHp(maxHp);
@@ -50,7 +52,7 @@ public class Pokemon {
         setAttacks(attacks);
     }
 
-    public void setId(String id){
+    public void setId(String id) {
         if (id != null && !id.trim().isEmpty()) {
             this.id = id;
         }
@@ -108,8 +110,8 @@ public class Pokemon {
     }
 
     public void setAttacks(List<Attack> attacks) {
-        if (attacks == null || attacks.isEmpty() || attacks.size() > MAX_ATTACKS) {
-            throw new InvalidPokemonException("En Pokémon måste ha mellan 1 och " + MAX_ATTACKS + " attacker.");
+        if (attacks == null || attacks.size() < MIN_ATTACKS || attacks.size() > MAX_ATTACKS) {
+            throw new InvalidPokemonException("En Pokémon måste ha mellan " + MIN_ATTACKS + " och " + MAX_ATTACKS + " attacker.");
         }
         this.attacks = new ArrayList<>(attacks);
     }
@@ -118,8 +120,8 @@ public class Pokemon {
         if (attack == null) {
             throw new InvalidPokemonException("Attacken kan inte vara null.");
         }
-        if (this.attacks.size() >= 4) {
-            throw new InvalidPokemonException("En Pokémon kan inte ha fler än 4 attacker!");
+        if (this.attacks.size() >= MAX_ATTACKS) {
+            throw new InvalidPokemonException("En Pokémon kan inte ha fler än " + MAX_ATTACKS + " attacker!");
         }
         this.attacks.add(attack);
     }
@@ -128,8 +130,9 @@ public class Pokemon {
         if (damage <= 0) return;
         this.currentHp = Math.max(0, this.currentHp - damage);
     }
+
     public void setPotential(int potential) {
-        this.potential = potential;
+        this.potential = Math.clamp(potential, MIN_POTENTIAL, MAX_POTENTIAL);
     }
 
     public void healFull() {
@@ -147,25 +150,28 @@ public class Pokemon {
     }
 
     @JsonIgnore
-    public int getBaseDefense() {
-        return baseDefense;
-    }
-
-    @JsonIgnore
     public boolean isComplete() {
-        return name != null && type != null && !attacks.isEmpty()
-                && attacks.stream().allMatch(a -> a != null && a.getName() != null && a.getType() != null);
+        return name != null && !name.trim().isEmpty()
+                && type != null
+                && maxHp >= MIN_HP && maxHp <= MAX_HP
+                && speed >= MIN_SPEED && speed <= MAX_SPEED
+                && defense >= MIN_DEFENSE && defense <= MAX_DEFENSE
+                && attacks != null && attacks.size() >= MIN_ATTACKS && attacks.size() <= MAX_ATTACKS;
     }
 
     public String getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }
+
     public int getPotential() {
         return potential;
     }
+
+    @JsonIgnore
     public String getDisplayName() {
         return name + " (IV " + potential + "%)";
     }
@@ -196,7 +202,7 @@ public class Pokemon {
 
     @Override
     public String toString() {
-        return String.format("%s [%s] - HP: %d/%d | Försvar: %d | Snabbhet: %d | Attacker: %d/4",
+        return String.format("%s [%s] - HP: %d/%d | Försvar: %d | Snabbhet: %d | Attacker: %d/" + MAX_ATTACKS,
                 name, type, currentHp, maxHp, defense, speed, attacks.size());
     }
 }

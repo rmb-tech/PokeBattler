@@ -27,14 +27,14 @@ Ett konsolbaserat Pokémon-spel där man samlar Pokémon i ett Pokédex och slå
 * Visa, lägga till, redigera, ta bort och söka Pokémon.
 * Redigera namn, typ, Max HP, försvar, snabbhet samt lägga till, ändra och ta bort attacker (1–4 per Pokémon).
 * Fånga en slumpad Pokémon, läka alla Pokémon och återställa till seedat läge.
-* **Dynamisk Stat-varians (±20%):** Alla Pokémon som fånas, seedas eller skapas som vilda får en unik slumpmässig variation på sina stats och attacker. Logiken styrs via `applyVariance` och `createWithVariance`, där värdena skalas med en faktor mellan 0.90 och 1.10 samt skyddas av `Math.clamp`:
-* IV. Potential för alla Pokémon baserat på hur nära 100% de är i `createWithVariance`.  
+* Stat-varians: varje Pokémon som fångas, seedas eller möts som vild får en slumpad faktor mellan 0.80 och 1.20. Samma faktor skalar HP, försvar, snabbhet och attackstyrka (inom giltiga gränser via Math.clamp). 
+* IV: Variantfaktorn blir IV/Potential 0–100 % (0 % = ×0.80, 100 % = ×1.20) som visas som (IV 87%). Manuellt skapade Pokémon har ingen faktor och får IV 0 %."
 * Fullständig validering av alla fält vid skapande och redigering.
 
 ### Strid (nytt i Inlämning 2)
-* **1v1 Strid:** en av dina Pokémon mot en vild Pokémon.
-* **3v3 Lagstrid:** tre mot tre, nästa Pokémon skickas ut automatiskt när en svimmar.
-* **RAID (5v1):** fem av dina Pokémon mot en enda stark Raid-boss.
+* **1v1 Strid:** En av dina Pokémon mot en vild Pokémon.
+* **3v3 Lagstrid:** Tre mot tre, nästa Pokémon skickas ut automatiskt när en svimmar.
+* **RAID (5v1):** Fem av dina Pokémon mot en enda stark Raid-boss.
 * Turordning efter snabbhet. 
 * Träffsäkerhet, typeffektivitet, kritiska träffar och statusattacker.
 * Tydlig battle-logg för varje runda samt slutresultat.
@@ -198,7 +198,7 @@ DamageAttack                 StatusAttack
 
 ### Turordning
 
-Pokémon med högst **snabbhet** attackerar först i varje runda. Vid lika snabbhet avgörs det slumpmässigt (omslås varje runda).
+Pokémon med högst **snabbhet** attackerar först i varje runda. Vid lika snabbhet avgörs det slumpmässigt (slumpas varje runda).
 
 ### Träffsäkerhet
 
@@ -207,7 +207,7 @@ En attack träffar med sannolikheten `träffsäkerhet`, så en attack med 90 tr�
 ### Skadeformel
 
 ```text
-blockedDamage = defence / 2  
+blockedDamage = defense / 2  
 rawDamage     = (baseDamage - blockedDamage) × typeMultiplier × critMultiplier
 finalDamage   = max(1, round(rawDamage))
 ```
@@ -215,7 +215,7 @@ finalDamage   = max(1, round(rawDamage))
 | Del | Förklaring |
 | :--- | :--- |
 | `baseDamage` | Attackens grundskada (5–250) |
-| `defence` | Försvararens aktuella försvar, vilket kan vara sänkt av en statusattack |
+| `defense` | Försvararens aktuella försvar, vilket kan vara sänkt av en statusattack |
 | `typeMultiplier` | Från typeffektivitetstabellen (se nedan) |
 | `critMultiplier` | 10 % chans för kritisk träff vid träff, då 1.5×, annars 1.0× |
 | `max(1, …)` | En träff gör alltid minst 1 skada |
@@ -244,7 +244,7 @@ En statusattack (t.ex. *Screech*) sänker motståndarens försvar. Effekten kan 
 
 ### Dödläge
 
-En duell får vara högst **30 rundor**. Om ingen svimmat efter det avgörs duellen av **högst HP-procent**. Vid lika vinner CPUn.
+En duell får vara högst **30 rundor**. Om ingen svimmat efter det räknas spelarens Pokémon som besegrad.
 
 ### RAID-läge
 
@@ -285,7 +285,7 @@ Sparas automatiskt efter ändringar i Pokédexet, efter varje strid, vid manuell
 
 ## 📊 Statistik
 
-Efter varje **avslutad** strid sparas resultatet (avbrutna strider räknas inte). Menyval **4. Stridsresultat** visar:
+Efter varje **avslutad** strid sparas resultatet (avbrutna strider räknas inte). Menyval **4. Stridsstatistik** visar:
 * Totalt antal strider, vinster, förluster och vinstprocent.
 * Fördelning per stridstyp (1v1 / 3v3 / RAID).
 * Mest använda Pokémon (flest dueller) och mest använda attack (flest gånger vald av spelaren).

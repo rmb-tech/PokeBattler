@@ -8,8 +8,10 @@ import se.rmbtech.pokebattler.model.StatusAttack;
 import java.util.List;
 import java.util.Random;
 
-public class RaidDataSeeder {
+public final class RaidDataSeeder {
     private static final Random random = new Random();
+
+    private RaidDataSeeder() {}
 
     public static List<Pokemon> getRaidBosses() {
         return List.of(
