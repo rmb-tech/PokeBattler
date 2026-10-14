@@ -22,6 +22,7 @@ public class Pokemon {
     private int defense; // aktuellt försvar (kan sänkas i strid)
     private int baseDefense; // permanent försvar, återställs efter strid
     private int speed;
+    private int potential;
     public static final int MIN_HP = 10;
     public static final int MAX_HP = 1000;
     public static final int MIN_DEFENSE = 0;
@@ -127,6 +128,9 @@ public class Pokemon {
         if (damage <= 0) return;
         this.currentHp = Math.max(0, this.currentHp - damage);
     }
+    public void setPotential(int potential) {
+        this.potential = potential;
+    }
 
     public void healFull() {
         this.currentHp = this.maxHp;
@@ -158,6 +162,12 @@ public class Pokemon {
     }
     public String getName() {
         return name;
+    }
+    public int getPotential() {
+        return potential;
+    }
+    public String getDisplayName() {
+        return name + " (IV " + potential + "%)";
     }
 
     public PokemonType getType() {

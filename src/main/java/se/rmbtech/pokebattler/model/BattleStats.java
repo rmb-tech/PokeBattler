@@ -26,7 +26,8 @@ public class BattleStats {
         }
         for (BattleResult.DuelResult duel : result.duels()) {
             WinLossRecord record = pokemonRecords.computeIfAbsent(duel.pokemonId(), id -> new WinLossRecord());
-            record.setPokemonName(duel.pokemonName()); // Säkerställer att namnet är uppdaterat
+            record.setPokemonName(duel.pokemonName());
+            record.setPotential(duel.potential());
             record.add(duel.won());
         }
         for (String attackName : result.playerAttacksUsed()) {
@@ -49,15 +50,26 @@ public class BattleStats {
     }
 
     public Optional<String> findMostUsedPokemon() {
-        return pokemonRecords.entrySet().stream()
-                .max(Comparator.comparingInt(entry -> entry.getValue().timesUsed()))
-                .map(Map.Entry::getKey);
+        return pokemonRecords.values().stream()
+                .max(Comparator.comparingInt(WinLossRecord::timesUsed))
+                .map(record -> record.getPokemonName() + " (IV " + record.getPotential() + "%)");
     }
 
-    public int getTotalWins() { return totalWins; }
-    public int getTotalLosses() { return totalLosses; }
-    public void setTotalWins(int totalWins) { this.totalWins = Math.max(0, totalWins); }
-    public void setTotalLosses(int totalLosses) { this.totalLosses = Math.max(0, totalLosses); }
+    public int getTotalWins() {
+        return totalWins;
+    }
+
+    public int getTotalLosses() {
+        return totalLosses;
+    }
+
+    public void setTotalWins(int totalWins) {
+        this.totalWins = Math.max(0, totalWins);
+    }
+
+    public void setTotalLosses(int totalLosses) {
+        this.totalLosses = Math.max(0, totalLosses);
+    }
 
     public Map<String, WinLossRecord> getPokemonRecords() {
         return Collections.unmodifiableMap(pokemonRecords);

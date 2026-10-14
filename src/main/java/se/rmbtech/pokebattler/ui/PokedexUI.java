@@ -94,7 +94,7 @@ public class PokedexUI {
         Pokemon newPokemon = PokemonDataSeeder.getRandomSeedPokemon();
         manager.addPokemon(newPokemon);
         FileManager.savePokemons(manager.getPokemons());
-        System.out.println("\n🎉 GRATTIS! Du fångade en vild " + newPokemon.getName() + " (" + newPokemon.getType() + ")!");
+        System.out.println("\n🎉 GRATTIS! Du fångade en vild " + newPokemon.getDisplayName() + " (" + newPokemon.getType() + ")!");
     }
 
     private void healAllPokemons() {
@@ -126,7 +126,7 @@ public class PokedexUI {
         for (int i = 0; i < list.size(); i++) {
             Pokemon p = list.get(i);
             System.out.printf("#%-2d %-12s │ Typ: %-10s │ HP: %3d/%-3d │ Försvar: %-3d │ Snabbhet: %-3d%n",
-                    (i + 1), p.getName(), p.getType(), p.getCurrentHp(), p.getMaxHp(), p.getDefense(), p.getSpeed());
+                    (i + 1), p.getDisplayName(), p.getType(), p.getCurrentHp(), p.getMaxHp(), p.getDefense(), p.getSpeed());
             for (Attack a : p.getAttacks()) {
                 System.out.printf("     └─ %-15s [%-6s] %-22s │ Träff: %3d%% │ Typ: %s%n",
                         a.getName(), a.categoryLabel(), a.effectSummary(), a.getAccuracy(), a.getType());

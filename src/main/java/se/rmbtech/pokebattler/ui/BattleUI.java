@@ -81,7 +81,7 @@ public class BattleUI {
         for (int i = 0; i < readyPokemons.size(); i++) {
             Pokemon p = readyPokemons.get(i);
             System.out.printf("#%-2d %-12s │ HP: %3d/%-3d │ Defense: %-3d │ Speed: %-3d%n",
-                    (i + 1), p.getName(), p.getCurrentHp(), p.getMaxHp(), p.getDefense(), p.getSpeed());
+                    (i + 1), p.getDisplayName(), p.getCurrentHp(), p.getMaxHp(), p.getDefense(), p.getSpeed());
         }
 
         for (int count = 1; count <= teamSize; count++) {

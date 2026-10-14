@@ -9,21 +9,28 @@ import java.util.Random;
 public class PokemonDataSeeder {
     private static final Random random = new Random();
 
-    private static int applyVariance(int baseValue) {
-        double factor = 0.90 + (random.nextDouble() * 0.20);
+    private static int applyVariance(int baseValue, double factor) {
         return (int) Math.round(baseValue * factor);
     }
 
     public static Pokemon createWithVariance(String name, PokemonType type, int baseHp, int baseDefense, int baseSpeed, List<Attack> attacks) {
-        int hp = Math.clamp(applyVariance(baseHp), 10, 1000);
-        int defense = Math.clamp(applyVariance(baseDefense), 0, 100);
-        int speed = Math.clamp(applyVariance(baseSpeed), 1, 300);
+        double factor = 0.80 + (random.nextDouble() * 0.40);
+
+        int potential = (int) Math.round(((factor - 0.80) / 0.40) * 100);
+        potential = Math.clamp(potential, 0, 100);
+
+        int hp = Math.clamp(applyVariance(baseHp, factor), 10, 1000);
+        int defense = Math.clamp(applyVariance(baseDefense, factor), 0, 100);
+        int speed = Math.clamp(applyVariance(baseSpeed, factor), 1, 300);
 
         List<Attack> variedAttacks = attacks.stream()
-                .map(a -> a.scaledCopy(PokemonDataSeeder::applyVariance))
+                .map(a -> a.scaledCopy(baseVal -> applyVariance(baseVal, factor)))
                 .toList();
 
-        return new Pokemon(name, type, hp, defense, speed, variedAttacks);
+        Pokemon pokemon = new Pokemon(name, type, hp, defense, speed, variedAttacks);
+        pokemon.setPotential(potential);
+
+        return pokemon;
     }
 
     public static List<Pokemon> getSeedPokemon() {

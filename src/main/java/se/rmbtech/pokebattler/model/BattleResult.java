@@ -11,6 +11,6 @@ public record BattleResult(BattleMode mode, boolean playerWon, List<DuelResult> 
         playerAttacksUsed = List.copyOf(playerAttacksUsed);
     }
 
-    public record DuelResult(String pokemonId, String pokemonName, boolean won) {
+    public record DuelResult(String pokemonId, String pokemonName, int potential, boolean won) {
     }
 }

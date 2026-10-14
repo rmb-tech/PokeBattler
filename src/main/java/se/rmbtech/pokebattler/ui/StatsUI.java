@@ -30,8 +30,10 @@ public class StatsUI {
                         mode.getLabel(), record.getWins(), record.getLosses(), record.winPercentage()));
 
         System.out.println("\nPokémon (vunna/förlorade dueller):");
-        stats.getPokemonRecords().forEach((id, record) ->
-                System.out.printf("  %-12s %2d V / %2d F  (%3.0f%% vinster)%n",
-                        record.getPokemonName(), record.getWins(), record.getLosses(), record.winPercentage()));
+        stats.getPokemonRecords().forEach((id, record) -> {
+            String displayName = record.getPokemonName() + " (IV " + record.getPotential() + "%)";
+            System.out.printf("  %-18s %2d V / %2d F  (%3.0f%% vinster)%n",
+                    displayName, record.getWins(), record.getLosses(), record.winPercentage());
+        });
     }
 }

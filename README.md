@@ -27,21 +27,17 @@ Ett konsolbaserat Pokémon-spel där man samlar Pokémon i ett Pokédex och slå
 * Visa, lägga till, redigera, ta bort och söka Pokémon.
 * Redigera namn, typ, Max HP, försvar, snabbhet samt lägga till, ändra och ta bort attacker (1–4 per Pokémon).
 * Fånga en slumpad Pokémon, läka alla Pokémon och återställa till seedat läge.
-* **Dynamisk Stat-varians (±10%):** Alla Pokémon som fångas, seedas eller skapas som vilda får en unik slumpmässig variation på sina stats och attacker. Logiken styrs via `applyVariance` och `createWithVariance`, där värdena skalas med en faktor mellan 0.90 och 1.10 samt skyddas av `Math.clamp`:
-  ```java
-  private static int applyVariance(int baseValue) {
-      double factor = 0.90 + (random.nextDouble() * 0.20);
-      return (int) Math.round(baseValue * factor);
-  }
-  ```
+* **Dynamisk Stat-varians (±20%):** Alla Pokémon som fånas, seedas eller skapas som vilda får en unik slumpmässig variation på sina stats och attacker. Logiken styrs via `applyVariance` och `createWithVariance`, där värdena skalas med en faktor mellan 0.90 och 1.10 samt skyddas av `Math.clamp`:
+* IV. Potential för alla Pokémon baserat på hur nära 100% de är i `createWithVariance`.  
 * Fullständig validering av alla fält vid skapande och redigering.
 
 ### Strid (nytt i Inlämning 2)
 * **1v1 Strid:** en av dina Pokémon mot en vild Pokémon.
 * **3v3 Lagstrid:** tre mot tre, nästa Pokémon skickas ut automatiskt när en svimmar.
 * **RAID (5v1):** fem av dina Pokémon mot en enda stark Raid-boss.
-* Turordning efter snabbhet, träffsäkerhet, typeffektivitet, kritiska träffar och statusattacker.
-* Tydlig battle-logg för varje tur samt slutresultat.
+* Turordning efter snabbhet. 
+* Träffsäkerhet, typeffektivitet, kritiska träffar och statusattacker.
+* Tydlig battle-logg för varje runda samt slutresultat.
 
 ### Statistik
 * Totala vinster och förluster, vinstprocent, resultat per stridstyp, vinst/förlust per Pokémon samt mest använda Pokémon och attack. Sparas mellan sessioner.
@@ -337,6 +333,8 @@ Efter varje **avslutad** strid sparas resultatet (avbrutna strider räknas inte)
 * Slumpen (`Random`) är inte injicerbar i attackklasserna, vilket gör exakta skadevärden svåra att enhetstesta. Inga automatiska enhetstester är skrivna ännu.
 * Försvaret dras av som ett fast belopp (`försvar / 2`). Mycket svaga attacker mot Pokémon med högt försvar gör därför bara 1 skada.
 * Raid-läget kräver exakt 5 stridsdugliga Pokémon. Raid-bossar har fasta attacker och kan inte fångas.
+* Endast 3 RAID bossar är implementerade. 
+* Manuellt skapade Pokemon får en IV på 0% 
 * Pokémon läker inte automatiskt mellan strider, utan man läker via Pokédex-menyn.
 * Nivå- och erfarenhetsmekanik (Level-up) är ännu inte implementerat.
 * Datafilerna sparas relativt arbetsmappen, så programmet bör startas från projektets rotmapp.
