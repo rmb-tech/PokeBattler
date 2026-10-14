@@ -42,6 +42,14 @@ public class DamageAttack extends Attack {
         return baseDamage;
     }
 
+    public int calculateDamage(Pokemon defender, double typeMultiplier, boolean isCritical) {
+        int blockedDamage = defender.getDefense() / 2;
+        double critMultiplier = isCritical ? CRIT_MULTIPLIER : 1.0;
+
+        long rawDamage = Math.round((baseDamage - blockedDamage) * typeMultiplier * critMultiplier);
+        return Math.max(1, (int) rawDamage);
+    }
+
     @Override
     public void execute(Pokemon attacker, Pokemon defender) {
         if (random.nextInt(100) >= getAccuracy()) {
@@ -50,14 +58,9 @@ public class DamageAttack extends Attack {
         }
 
         double typeMultiplier = getType().getMultiplierAgainst(defender.getType());
-
         boolean isCritical = random.nextInt(100) < CRIT_CHANCE_PERCENT;
-        double critMultiplier = isCritical ? CRIT_MULTIPLIER : 1.0;
 
-        int blockedDamage = defender.getDefense() / 2;
-        int rawDamage = (int) Math.round((baseDamage - blockedDamage) * typeMultiplier * critMultiplier);
-        int finalDamage = Math.max(1, rawDamage);
-
+        int finalDamage = calculateDamage(defender, typeMultiplier, isCritical);
         defender.takeDamage(finalDamage);
 
         StringBuilder log = new StringBuilder(String.format("💥 Träff! %s tog %d skada! (HP: %d/%d)",
@@ -70,12 +73,35 @@ public class DamageAttack extends Attack {
         System.out.println(log);
     }
 
-    @Override public String categoryLabel() { return "Damage"; }
-    @Override public String effectSummary() { return "Skada: " + baseDamage; }
-    @Override public String powerLabel() { return "basskada"; }
-    @Override public int minPower() { return MIN_DAMAGE; }
-    @Override public int maxPower() { return MAX_DAMAGE; }
-    @Override public void updatePower(int newPower) { setBaseDamage(newPower); }
+    @Override
+    public String categoryLabel() {
+        return "Damage";
+    }
+
+    @Override
+    public String effectSummary() {
+        return "Skada: " + baseDamage;
+    }
+
+    @Override
+    public String powerLabel() {
+        return "basskada";
+    }
+
+    @Override
+    public int minPower() {
+        return MIN_DAMAGE;
+    }
+
+    @Override
+    public int maxPower() {
+        return MAX_DAMAGE;
+    }
+
+    @Override
+    public void updatePower(int newPower) {
+        setBaseDamage(newPower);
+    }
 
     @Override
     public Attack scaledCopy(IntUnaryOperator scaler) {

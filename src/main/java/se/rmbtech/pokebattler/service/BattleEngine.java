@@ -51,7 +51,7 @@ public class BattleEngine {
             Pokemon activeCpu = cpuTeam.get(cpuIdx);
 
             System.out.println("\n--------------------------------------------------");
-            System.out.printf("🔥 AVSNITT: %s (HP: %d/%d) VS Vild %s (HP: %d/%d)%n",
+            System.out.printf("🔥 DUELL: %s (HP: %d/%d) VS Vild %s (HP: %d/%d)%n",
                     activePlayer.getName(), activePlayer.getCurrentHp(), activePlayer.getMaxHp(),
                     activeCpu.getName(), activeCpu.getCurrentHp(), activeCpu.getMaxHp());
             System.out.println("--------------------------------------------------");
@@ -94,6 +94,8 @@ public class BattleEngine {
                 resolveStalemate(player);
                 break;
             }
+
+            System.out.printf("%n--- RUNDA %d ---", round);
 
             if (determineTurnOrder(player, cpu)) {
                 attacksUsed.add(takeTurn(player, cpu, playerChooser).getName());

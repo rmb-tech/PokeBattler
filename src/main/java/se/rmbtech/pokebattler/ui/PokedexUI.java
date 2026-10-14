@@ -8,7 +8,6 @@ import se.rmbtech.pokebattler.model.DamageAttack;
 import se.rmbtech.pokebattler.model.Pokemon;
 import se.rmbtech.pokebattler.model.PokemonType;
 import se.rmbtech.pokebattler.model.StatusAttack;
-import se.rmbtech.pokebattler.repository.FileManager;
 import se.rmbtech.pokebattler.service.PokedexService;
 import se.rmbtech.pokebattler.service.PokemonDataSeeder;
 import se.rmbtech.pokebattler.service.StatsService;
@@ -40,7 +39,7 @@ public class PokedexUI {
         } catch (InputCancelledException e) {
             System.out.println("\nInmatningen avbröts. Sparar och avslutar...");
         } finally {
-            FileManager.savePokemons(service.getPokemons());
+            service.save();
             scanner.close();
         }
     }
@@ -55,10 +54,7 @@ public class PokedexUI {
                 switch (choice) {
                     case 1 -> pokedexSubMenu();
                     case 2 -> catchRandomPokemon();
-                    case 3 -> {
-                        battleUI.startBattleMenu();
-                        FileManager.savePokemons(service.getPokemons());
-                    }
+                    case 3 -> battleUI.startBattleMenu();
                     case 4 -> statsUI.showStats();
                     case 5 -> resetToDefaultData();
                     case 6 -> saveToFile();
@@ -97,26 +93,21 @@ public class PokedexUI {
     private void catchRandomPokemon() {
         Pokemon newPokemon = PokemonDataSeeder.getRandomSeedPokemon();
         service.addPokemon(newPokemon);
-        FileManager.savePokemons(service.getPokemons());
         System.out.println("\n🎉 GRATTIS! Du fångade en vild " + newPokemon.getDisplayName() + " (" + newPokemon.getType() + ")!");
     }
 
     private void healAllPokemons() {
-        for (Pokemon p : service.getPokemons()) {
-            p.healFull();
-        }
-        FileManager.savePokemons(service.getPokemons());
+        service.healAll();
         System.out.println("\n💖 Alla dina Pokémon har blivit fullständigt läkta!");
     }
 
     private void resetToDefaultData() {
         service.seedDefaultData();
-        FileManager.savePokemons(service.getPokemons());
         System.out.println("✅ Pokédex återställt till seedat läge!");
     }
 
     private void saveToFile() {
-        FileManager.savePokemons(service.getPokemons());
+        service.save();
         System.out.println("✅ Data sparad till fil.");
     }
 
@@ -159,7 +150,6 @@ public class PokedexUI {
 
         Pokemon newPokemon = new Pokemon(name, type, maxHp, defense, speed, attacks);
         service.addPokemon(newPokemon);
-        FileManager.savePokemons(service.getPokemons());
         System.out.println("✅ Pokémon tillagd och sparad till JSON!");
     }
 
@@ -209,12 +199,12 @@ public class PokedexUI {
                 case 5 -> {
                     int newSpeed = InputHelper.readIntInRange(scanner, "Ny Snabbhet", Pokemon.MIN_SPEED, Pokemon.MAX_SPEED);
                     p.setSpeed(newSpeed);
-                    System.out.println("✅ Snabbhet uppdaterad!");
+                    System.out.println("✅ Snabbhet uppdaterat!");
                 }
                 case 6 -> editAttacksMenu(p);
                 case 7 -> editing = false;
             }
-            FileManager.savePokemons(service.getPokemons());
+            service.save();
         }
     }
 
@@ -304,7 +294,6 @@ public class PokedexUI {
         Pokemon removed = service.getPokemon(internalIndex);
         service.removePokemon(internalIndex);
 
-        FileManager.savePokemons(service.getPokemons());
         System.out.println("Tog bort: " + removed.getName());
     }
 
