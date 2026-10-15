@@ -1,6 +1,7 @@
 package se.rmbtech.pokebattler.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PokemonRecord extends WinLossRecord {
@@ -11,6 +12,7 @@ public class PokemonRecord extends WinLossRecord {
         return pokemonName;
     }
 
+    @JsonProperty
     public int getPotential() {
         return potential;
     }
@@ -20,7 +22,7 @@ public class PokemonRecord extends WinLossRecord {
     }
 
     public void setPotential(int potential) {
-        this.potential =Math.clamp(potential, Pokemon.MIN_POTENTIAL, Pokemon.MAX_POTENTIAL);
+        this.potential = Math.clamp(potential, Pokemon.MIN_POTENTIAL, Pokemon.MAX_POTENTIAL);
     }
 
     public String displayName() {
