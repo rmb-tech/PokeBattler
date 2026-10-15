@@ -42,42 +42,11 @@ public final class PokemonDataSeeder {
     public static List<Pokemon> getSeedPokemon() {
         List<Pokemon> pokemonList = new ArrayList<>();
 
+        // --- NORMAL ---
         pokemonList.add(createWithVariance("Pikachu", PokemonType.ELECTRIC, 110, 40, 90, List.of(
                 new DamageAttack("Thunderbolt", 90, 100, PokemonType.ELECTRIC),
                 new DamageAttack("Quick Attack", 40, 100, PokemonType.NORMAL),
                 new StatusAttack("Tail Whip", 100, PokemonType.NORMAL, 15)
-        )));
-
-        pokemonList.add(createWithVariance("Charmander", PokemonType.FIRE, 100, 35, 65, List.of(
-                new DamageAttack("Ember", 45, 100, PokemonType.FIRE),
-                new DamageAttack("Flame Burst", 70, 95, PokemonType.FIRE)
-        )));
-
-        pokemonList.add(createWithVariance("Squirtle", PokemonType.WATER, 120, 55, 43, List.of(
-                new DamageAttack("Water Gun", 40, 100, PokemonType.WATER),
-                new DamageAttack("Aqua Tail", 65, 95, PokemonType.WATER)
-        )));
-
-        pokemonList.add(createWithVariance("Bulbasaur", PokemonType.GRASS, 125, 50, 45, List.of(
-                new DamageAttack("Vine Whip", 45, 100, PokemonType.GRASS),
-                new DamageAttack("Seed Bomb", 60, 95, PokemonType.GRASS)
-        )));
-
-        pokemonList.add(createWithVariance("Gastly", PokemonType.GHOST, 90, 25, 80, List.of(
-                new DamageAttack("Lick", 30, 100, PokemonType.GHOST),
-                new DamageAttack("Shadow Ball", 100, 90, PokemonType.GHOST),
-                new StatusAttack("Screech", 85, PokemonType.NORMAL, 20)
-        )));
-
-        pokemonList.add(createWithVariance("Machop", PokemonType.FIGHTING, 140, 45, 35, List.of(
-                new DamageAttack("Karate Chop", 50, 100, PokemonType.FIGHTING),
-                new DamageAttack("Cross Chop", 85, 90, PokemonType.FIGHTING)
-        )));
-
-        pokemonList.add(createWithVariance("Onix", PokemonType.ROCK, 110, 95, 70, List.of(
-                new DamageAttack("Rock Throw", 50, 90, PokemonType.ROCK),
-                new DamageAttack("Iron Tail", 75, 85, PokemonType.STEEL),
-                new StatusAttack("Screech", 85, PokemonType.NORMAL, 25)
         )));
 
         pokemonList.add(createWithVariance("Jigglypuff", PokemonType.NORMAL, 220, 20, 20, List.of(
@@ -85,44 +54,9 @@ public final class PokemonDataSeeder {
                 new DamageAttack("Dazzling Gleam", 80, 95, PokemonType.FAIRY)
         )));
 
-        pokemonList.add(createWithVariance("Abra", PokemonType.PSYCHIC, 70, 15, 90, List.of(
-                new DamageAttack("Zen Headbutt", 45, 100, PokemonType.PSYCHIC),
-                new DamageAttack("Psyshock", 110, 85, PokemonType.PSYCHIC)
-        )));
-
         pokemonList.add(createWithVariance("Snorlax", PokemonType.NORMAL, 330, 65, 30, List.of(
                 new DamageAttack("Lick", 35, 100, PokemonType.GHOST),
                 new DamageAttack("Body Slam", 95, 95, PokemonType.NORMAL)
-        )));
-
-        pokemonList.add(createWithVariance("Mewtwo", PokemonType.PSYCHIC, 250, 75, 130, List.of(
-                new DamageAttack("Psycho Cut", 60, 100, PokemonType.PSYCHIC),
-                new DamageAttack("Psystrike", 150, 90, PokemonType.PSYCHIC)
-        )));
-
-        pokemonList.add(createWithVariance("Arcanine", PokemonType.FIRE, 180, 60, 95, List.of(
-                new DamageAttack("Flamethrower", 90, 100, PokemonType.FIRE),
-                new DamageAttack("Extreme Speed", 80, 100, PokemonType.NORMAL)
-        )));
-
-        pokemonList.add(createWithVariance("Gyarados", PokemonType.WATER, 210, 70, 81, List.of(
-                new DamageAttack("Waterfall", 80, 100, PokemonType.WATER),
-                new DamageAttack("Bite", 60, 100, PokemonType.DARK)
-        )));
-
-        pokemonList.add(createWithVariance("Gengar", PokemonType.GHOST, 130, 45, 110, List.of(
-                new DamageAttack("Shadow Ball", 90, 100, PokemonType.GHOST),
-                new DamageAttack("Dark Pulse", 80, 100, PokemonType.DARK)
-        )));
-
-        pokemonList.add(createWithVariance("Dragonite", PokemonType.DRAGON, 220, 75, 80, List.of(
-                new DamageAttack("Dragon Claw", 80, 100, PokemonType.DRAGON),
-                new DamageAttack("Hyper Beam", 120, 85, PokemonType.NORMAL)
-        )));
-
-        pokemonList.add(createWithVariance("Scyther", PokemonType.BUG, 150, 55, 105, List.of(
-                new DamageAttack("Wing Attack", 60, 100, PokemonType.FLYING),
-                new DamageAttack("X-Scissor", 80, 100, PokemonType.BUG)
         )));
 
         pokemonList.add(createWithVariance("Eevee", PokemonType.NORMAL, 120, 40, 55, List.of(
@@ -131,9 +65,26 @@ public final class PokemonDataSeeder {
                 new StatusAttack("Tail Whip", 100, PokemonType.NORMAL, 15)
         )));
 
-        pokemonList.add(createWithVariance("Lucario", PokemonType.FIGHTING, 150, 50, 90, List.of(
-                new DamageAttack("Aura Sphere", 80, 100, PokemonType.FIGHTING),
-                new DamageAttack("Metal Claw", 50, 95, PokemonType.STEEL)
+        // --- FIRE ---
+        pokemonList.add(createWithVariance("Charmander", PokemonType.FIRE, 100, 35, 65, List.of(
+                new DamageAttack("Ember", 45, 100, PokemonType.FIRE),
+                new DamageAttack("Flame Burst", 70, 95, PokemonType.FIRE)
+        )));
+
+        pokemonList.add(createWithVariance("Arcanine", PokemonType.FIRE, 180, 60, 95, List.of(
+                new DamageAttack("Flamethrower", 90, 100, PokemonType.FIRE),
+                new DamageAttack("Extreme Speed", 80, 100, PokemonType.NORMAL)
+        )));
+
+        // --- WATER ---
+        pokemonList.add(createWithVariance("Squirtle", PokemonType.WATER, 120, 55, 43, List.of(
+                new DamageAttack("Water Gun", 40, 100, PokemonType.WATER),
+                new DamageAttack("Aqua Tail", 65, 95, PokemonType.WATER)
+        )));
+
+        pokemonList.add(createWithVariance("Gyarados", PokemonType.WATER, 210, 70, 81, List.of(
+                new DamageAttack("Waterfall", 80, 100, PokemonType.WATER),
+                new DamageAttack("Bite", 60, 100, PokemonType.DARK)
         )));
 
         pokemonList.add(createWithVariance("Lapras", PokemonType.WATER, 250, 65, 60, List.of(
@@ -141,14 +92,163 @@ public final class PokemonDataSeeder {
                 new DamageAttack("Surf", 90, 100, PokemonType.WATER)
         )));
 
-        pokemonList.add(createWithVariance("Gardevoir", PokemonType.PSYCHIC, 140, 45, 80, List.of(
-                new DamageAttack("Psychic", 90, 100, PokemonType.PSYCHIC),
-                new DamageAttack("Moonblast", 95, 100, PokemonType.FAIRY)
+        // --- GRASS ---
+        pokemonList.add(createWithVariance("Bulbasaur", PokemonType.GRASS, 125, 50, 45, List.of(
+                new DamageAttack("Vine Whip", 45, 100, PokemonType.GRASS),
+                new DamageAttack("Seed Bomb", 60, 95, PokemonType.GRASS)
+        )));
+
+        pokemonList.add(createWithVariance("Chikorita", PokemonType.GRASS, 110, 45, 45, List.of(
+                new DamageAttack("Razor Leaf", 55, 95, PokemonType.GRASS),
+                new DamageAttack("Tackle", 40, 100, PokemonType.NORMAL),
+                new StatusAttack("Growl", 100, PokemonType.NORMAL, 15)
+        )));
+
+        // --- ELECTRIC ---
+        pokemonList.add(createWithVariance("Jolteon", PokemonType.ELECTRIC, 130, 60, 130, List.of(
+                new DamageAttack("Thunder Shock", 40, 100, PokemonType.ELECTRIC),
+                new DamageAttack("Thunderbolt", 90, 100, PokemonType.ELECTRIC)
+        )));
+
+        // --- GHOST ---
+        pokemonList.add(createWithVariance("Gastly", PokemonType.GHOST, 90, 25, 80, List.of(
+                new DamageAttack("Lick", 30, 100, PokemonType.GHOST),
+                new DamageAttack("Shadow Ball", 100, 90, PokemonType.GHOST),
+                new StatusAttack("Screech", 85, PokemonType.NORMAL, 20)
+        )));
+
+        pokemonList.add(createWithVariance("Gengar", PokemonType.GHOST, 130, 45, 110, List.of(
+                new DamageAttack("Shadow Ball", 90, 100, PokemonType.GHOST),
+                new DamageAttack("Dark Pulse", 80, 100, PokemonType.DARK)
+        )));
+
+        // --- FIGHTING ---
+        pokemonList.add(createWithVariance("Machop", PokemonType.FIGHTING, 140, 45, 35, List.of(
+                new DamageAttack("Karate Chop", 50, 100, PokemonType.FIGHTING),
+                new DamageAttack("Cross Chop", 85, 90, PokemonType.FIGHTING)
+        )));
+
+        pokemonList.add(createWithVariance("Lucario", PokemonType.FIGHTING, 150, 50, 90, List.of(
+                new DamageAttack("Aura Sphere", 80, 100, PokemonType.FIGHTING),
+                new DamageAttack("Metal Claw", 50, 95, PokemonType.STEEL)
+        )));
+
+        // --- ROCK ---
+        pokemonList.add(createWithVariance("Onix", PokemonType.ROCK, 110, 95, 70, List.of(
+                new DamageAttack("Rock Throw", 50, 90, PokemonType.ROCK),
+                new DamageAttack("Iron Tail", 75, 85, PokemonType.STEEL),
+                new StatusAttack("Screech", 85, PokemonType.NORMAL, 25)
         )));
 
         pokemonList.add(createWithVariance("Tyranitar", PokemonType.ROCK, 230, 85, 61, List.of(
                 new DamageAttack("Stone Edge", 100, 80, PokemonType.ROCK),
                 new DamageAttack("Crunch", 80, 100, PokemonType.DARK)
+        )));
+
+        // --- PSYCHIC ---
+        pokemonList.add(createWithVariance("Abra", PokemonType.PSYCHIC, 70, 15, 90, List.of(
+                new DamageAttack("Zen Headbutt", 45, 100, PokemonType.PSYCHIC),
+                new DamageAttack("Psyshock", 110, 85, PokemonType.PSYCHIC)
+        )));
+
+        pokemonList.add(createWithVariance("Mewtwo", PokemonType.PSYCHIC, 250, 75, 130, List.of(
+                new DamageAttack("Psycho Cut", 60, 100, PokemonType.PSYCHIC),
+                new DamageAttack("Psystrike", 150, 90, PokemonType.PSYCHIC)
+        )));
+
+        pokemonList.add(createWithVariance("Gardevoir", PokemonType.PSYCHIC, 140, 45, 80, List.of(
+                new DamageAttack("Psychic", 90, 100, PokemonType.PSYCHIC),
+                new DamageAttack("Moonblast", 95, 100, PokemonType.FAIRY)
+        )));
+
+        // --- DRAGON ---
+        pokemonList.add(createWithVariance("Dragonite", PokemonType.DRAGON, 220, 75, 80, List.of(
+                new DamageAttack("Dragon Claw", 80, 100, PokemonType.DRAGON),
+                new DamageAttack("Hyper Beam", 120, 85, PokemonType.NORMAL)
+        )));
+
+        pokemonList.add(createWithVariance("Gible", PokemonType.DRAGON, 120, 45, 42, List.of(
+                new DamageAttack("Dragon Breath", 60, 100, PokemonType.DRAGON),
+                new DamageAttack("Scratch", 40, 100, PokemonType.NORMAL)
+        )));
+
+        // --- BUG ---
+        pokemonList.add(createWithVariance("Scyther", PokemonType.BUG, 150, 55, 105, List.of(
+                new DamageAttack("Wing Attack", 60, 100, PokemonType.FLYING),
+                new DamageAttack("X-Scissor", 80, 100, PokemonType.BUG)
+        )));
+
+        pokemonList.add(createWithVariance("Pinsir", PokemonType.BUG, 130, 85, 85, List.of(
+                new DamageAttack("Vice Grip", 55, 100, PokemonType.NORMAL),
+                new DamageAttack("X-Scissor", 80, 100, PokemonType.BUG)
+        )));
+
+        // --- POISON ---
+        pokemonList.add(createWithVariance("Ekans", PokemonType.POISON, 100, 44, 55, List.of(
+                new DamageAttack("Poison Sting", 35, 100, PokemonType.POISON),
+                new DamageAttack("Bite", 60, 100, PokemonType.DARK),
+                new StatusAttack("Leer", 100, PokemonType.NORMAL, 15)
+        )));
+
+        pokemonList.add(createWithVariance("Koffing", PokemonType.POISON, 100, 95, 35, List.of(
+                new DamageAttack("Sludge", 65, 100, PokemonType.POISON),
+                new DamageAttack("Tackle", 40, 100, PokemonType.NORMAL)
+        )));
+
+        // --- GROUND ---
+        pokemonList.add(createWithVariance("Sandshrew", PokemonType.GROUND, 110, 85, 40, List.of(
+                new DamageAttack("Scratch", 40, 100, PokemonType.NORMAL),
+                new DamageAttack("Bulldoze", 60, 100, PokemonType.GROUND)
+        )));
+
+        pokemonList.add(createWithVariance("Cubone", PokemonType.GROUND, 110, 95, 35, List.of(
+                new DamageAttack("Bone Club", 65, 85, PokemonType.GROUND),
+                new DamageAttack("Headbutt", 70, 100, PokemonType.NORMAL)
+        )));
+
+        // --- FLYING ---
+        pokemonList.add(createWithVariance("Pidgey", PokemonType.FLYING, 100, 40, 56, List.of(
+                new DamageAttack("Gust", 40, 100, PokemonType.FLYING),
+                new DamageAttack("Quick Attack", 40, 100, PokemonType.NORMAL)
+        )));
+
+        pokemonList.add(createWithVariance("Zubat", PokemonType.FLYING, 110, 35, 55, List.of(
+                new DamageAttack("Wing Attack", 60, 100, PokemonType.FLYING),
+                new DamageAttack("Bite", 60, 100, PokemonType.DARK)
+        )));
+
+        // --- ICE ---
+        pokemonList.add(createWithVariance("Snorunt", PokemonType.ICE, 110, 50, 50, List.of(
+                new DamageAttack("Powder Snow", 40, 100, PokemonType.ICE),
+                new DamageAttack("Ice Shard", 40, 100, PokemonType.ICE)
+        )));
+
+        // --- STEEL ---
+        pokemonList.add(createWithVariance("Magnemite", PokemonType.STEEL, 90, 70, 45, List.of(
+                new DamageAttack("Thunder Shock", 40, 100, PokemonType.ELECTRIC),
+                new DamageAttack("Flash Cannon", 80, 100, PokemonType.STEEL)
+        )));
+
+        pokemonList.add(createWithVariance("Skarmory", PokemonType.STEEL, 130, 100, 70, List.of(
+                new DamageAttack("Wing Attack", 60, 100, PokemonType.FLYING),
+                new DamageAttack("Steel Wing", 70, 90, PokemonType.STEEL)
+        )));
+
+        // --- DARK ---
+        pokemonList.add(createWithVariance("Umbreon", PokemonType.DARK, 190, 90, 65, List.of(
+                new DamageAttack("Faint Attack", 60, 100, PokemonType.DARK),
+                new DamageAttack("Dark Pulse", 80, 100, PokemonType.DARK)
+        )));
+
+        pokemonList.add(createWithVariance("Houndoom", PokemonType.DARK, 150, 50, 95, List.of(
+                new DamageAttack("Bite", 60, 100, PokemonType.DARK),
+                new DamageAttack("Flamethrower", 90, 100, PokemonType.FIRE)
+        )));
+
+        // --- FAIRY ---
+        pokemonList.add(createWithVariance("Clefairy", PokemonType.FAIRY, 170, 48, 35, List.of(
+                new DamageAttack("Pound", 40, 100, PokemonType.NORMAL),
+                new DamageAttack("Dazzling Gleam", 80, 95, PokemonType.FAIRY)
         )));
 
         return pokemonList;

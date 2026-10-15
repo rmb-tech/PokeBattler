@@ -17,7 +17,7 @@ public class Pokemon {
     public static final int MIN_HP = 10;
     public static final int MAX_HP = 1000;
     public static final int MIN_DEFENSE = 0;
-    public static final int MAX_DEFENSE = 100;
+    public static final int MAX_DEFENSE = 120;
     public static final int MIN_SPEED = 1;
     public static final int MAX_SPEED = 200;
     public static final int MIN_ATTACKS = 1;
