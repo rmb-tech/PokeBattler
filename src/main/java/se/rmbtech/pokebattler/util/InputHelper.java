@@ -7,7 +7,8 @@ import java.util.Scanner;
 
 public final class InputHelper {
 
-    private InputHelper() {}
+    private InputHelper() {
+    }
 
     private static String nextLine(Scanner scanner) {
         try {

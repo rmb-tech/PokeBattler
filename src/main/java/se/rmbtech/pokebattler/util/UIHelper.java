@@ -2,7 +2,8 @@ package se.rmbtech.pokebattler.util;
 
 public final class UIHelper {
 
-    private UIHelper() {}
+    private UIHelper() {
+    }
 
     public static void printWelcomeHeader() {
         System.out.println("==================================================================================");

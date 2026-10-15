@@ -24,7 +24,7 @@ public class JsonPokemonRepository implements PokemonRepository {
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(file, pokemons);
         } catch (IOException e) {
-            System.out.println("Kunde inte spara till JSON fil: " + e.getMessage());
+            System.out.println("Kunde inte spara till JSON-fil: " + e.getMessage());
         }
     }
 
@@ -34,7 +34,8 @@ public class JsonPokemonRepository implements PokemonRepository {
             return null;
         }
         try {
-            List<Pokemon> loaded = mapper.readValue(file, new TypeReference<List<Pokemon>>() {});
+            List<Pokemon> loaded = mapper.readValue(file, new TypeReference<List<Pokemon>>() {
+            });
             if (loaded == null) {
                 return null;
             }

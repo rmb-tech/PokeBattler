@@ -37,6 +37,7 @@ public class DamageAttack extends Attack {
         }
         this.baseDamage = baseDamage;
     }
+
     @JsonProperty
     public int getBaseDamage() {
         return baseDamage;

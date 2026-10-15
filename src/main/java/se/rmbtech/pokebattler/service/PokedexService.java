@@ -67,7 +67,7 @@ public class PokedexService {
         repository.save(pokemons);
     }
 
-    public boolean loadFromFile() {
+    public boolean loadSavedData() {
         List<Pokemon> loadedData = repository.load();
         if (loadedData != null && !loadedData.isEmpty()) {
             this.pokemons = new ArrayList<>(loadedData);

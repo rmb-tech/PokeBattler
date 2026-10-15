@@ -11,7 +11,8 @@ import java.util.Random;
 public final class RaidDataSeeder {
     private static final Random random = new Random();
 
-    private RaidDataSeeder() {}
+    private RaidDataSeeder() {
+    }
 
     public static List<Pokemon> getRaidBosses() {
         return List.of(

@@ -18,13 +18,14 @@ public class Pokemon {
     public static final int MIN_HP = 10;
     public static final int MAX_HP = 1000;
     public static final int MIN_DEFENSE = 0;
-    public static final int MAX_DEFENSE = 120;
+    public static final int MAX_DEFENSE = 200;
     public static final int MIN_SPEED = 1;
     public static final int MAX_SPEED = 200;
     public static final int MIN_ATTACKS = 1;
     public static final int MAX_ATTACKS = 4;
     public static final int MIN_POTENTIAL = 0;
     public static final int MAX_POTENTIAL = 100;
+    public static final int MAX_NAME_LENGTH = 30;
 
     private String id = UUID.randomUUID().toString();
     private String name;
@@ -63,6 +64,9 @@ public class Pokemon {
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new InvalidPokemonException("Pokémon-namnet får inte vara tomt.");
+        }
+        if (name.trim().length() > MAX_NAME_LENGTH) {
+            throw new InvalidPokemonException("Namnet får vara högst " + MAX_NAME_LENGTH + " tecken.");
         }
         this.name = name.trim();
     }

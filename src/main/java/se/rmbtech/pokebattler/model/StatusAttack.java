@@ -63,12 +63,35 @@ public class StatusAttack extends Attack {
                 attacker.getName(), defender.getName(), defender.getDefense());
     }
 
-    @Override public String categoryLabel() { return "Status"; }
-    @Override public String effectSummary() { return "Sänker försvar: -" + statReduction; }
-    @Override public String powerLabel() { return "försvarssänkning"; }
-    @Override public int minPower() { return MIN_REDUCTION; }
-    @Override public int maxPower() { return MAX_REDUCTION; }
-    @Override public void updatePower(int newPower) { setStatReduction(newPower); }
+    @Override
+    public String categoryLabel() {
+        return "Status";
+    }
+
+    @Override
+    public String effectSummary() {
+        return "Sänker försvar: -" + statReduction;
+    }
+
+    @Override
+    public String powerLabel() {
+        return "försvarssänkning";
+    }
+
+    @Override
+    public int minPower() {
+        return MIN_REDUCTION;
+    }
+
+    @Override
+    public int maxPower() {
+        return MAX_REDUCTION;
+    }
+
+    @Override
+    public void updatePower(int newPower) {
+        setStatReduction(newPower);
+    }
 
     @Override
     public Attack scaledCopy(IntUnaryOperator scaler) {

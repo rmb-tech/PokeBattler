@@ -15,7 +15,15 @@ public enum BattleMode {
         this.cpuTeamSize = cpuTeamSize;
     }
 
-    public String getLabel() { return label; }
-    public int getPlayerTeamSize() { return playerTeamSize; }
-    public int getCpuTeamSize() { return cpuTeamSize; }
+    public String getLabel() {
+        return label;
+    }
+
+    public int getPlayerTeamSize() {
+        return playerTeamSize;
+    }
+
+    public int getCpuTeamSize() {
+        return cpuTeamSize;
+    }
 }

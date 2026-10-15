@@ -11,11 +11,11 @@ public class Main {
     public static void main(String[] args) {
         PokedexService service = new PokedexService(new JsonPokemonRepository("pokebattler.json"));
 
-        if (service.loadFromFile()) {
-            UIHelper.simulateLoading("Laddar sparad data från 'pokebattler.json'", 1500);
+        if (service.loadSavedData()) {
+            UIHelper.simulateLoading("Laddar sparad data från 'pokebattler.json'", 500);
             System.out.println("Data har laddats framgångsrikt!");
         } else {
-            UIHelper.simulateLoading("Ingen användbar sparfil hittades. Genererar en starttrupp med 6 slumpade Pokémon", 2000);
+            UIHelper.simulateLoading("Ingen användbar sparfil hittades. Genererar en starttrupp med 6 slumpade Pokémon", 750);
             service.seedDefaultData();
             System.out.println("Starttrupp skapad och sparad!");
         }

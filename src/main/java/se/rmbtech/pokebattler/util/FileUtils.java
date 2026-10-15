@@ -7,7 +7,8 @@ import java.nio.file.StandardCopyOption;
 
 public class FileUtils {
 
-    private FileUtils() {}
+    private FileUtils() {
+    }
 
     public static void backupCorruptFile(File file) {
         File backup = new File(file.getPath() + ".bak");

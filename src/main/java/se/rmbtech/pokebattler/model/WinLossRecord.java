@@ -1,6 +1,7 @@
 package se.rmbtech.pokebattler.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WinLossRecord {
@@ -23,9 +24,19 @@ public class WinLossRecord {
         return timesUsed() == 0 ? 0 : (wins * 100.0) / timesUsed();
     }
 
-    public int getWins() { return wins; }
-    public int getLosses() { return losses; }
+    public int getWins() {
+        return wins;
+    }
 
-    public void setWins(int wins) { this.wins = Math.max(0, wins); }
-    public void setLosses(int losses) { this.losses = Math.max(0, losses); }
+    public int getLosses() {
+        return losses;
+    }
+
+    public void setWins(int wins) {
+        this.wins = Math.max(0, wins);
+    }
+
+    public void setLosses(int losses) {
+        this.losses = Math.max(0, losses);
+    }
 }

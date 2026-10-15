@@ -25,9 +25,11 @@ public abstract class Attack implements BattleAction {
     private PokemonType type;
     public static final int MIN_ACCURACY = 0;
     public static final int MAX_ACCURACY = 100;
+    public static final int MAX_NAME_LENGTH = 30;
 
     @JsonCreator
-    protected Attack() {}
+    protected Attack() {
+    }
 
     public Attack(String name, int accuracy, PokemonType type) {
         setName(name);
@@ -38,6 +40,9 @@ public abstract class Attack implements BattleAction {
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new InvalidPokemonException("Attackens namn får inte vara tomt.");
+        }
+        if (name.trim().length() > MAX_NAME_LENGTH) {
+            throw new InvalidPokemonException("Attackens får vara högst " + MAX_NAME_LENGTH + " tecken.");
         }
         this.name = name.trim();
     }
@@ -51,14 +56,22 @@ public abstract class Attack implements BattleAction {
 
     public void setAccuracy(int accuracy) {
         if (accuracy < MIN_ACCURACY || accuracy > MAX_ACCURACY) {
-            throw new InvalidPokemonException("Träffsäkerhet måste vara mellan " + MIN_ACCURACY +" och " + MAX_ACCURACY + ".");
+            throw new InvalidPokemonException("Träffsäkerhet måste vara mellan " + MIN_ACCURACY + " och " + MAX_ACCURACY + ".");
         }
         this.accuracy = accuracy;
     }
 
-    public String getName() { return name; }
-    public int getAccuracy() { return accuracy; }
-    public PokemonType getType() { return type; }
+    public String getName() {
+        return name;
+    }
+
+    public int getAccuracy() {
+        return accuracy;
+    }
+
+    public PokemonType getType() {
+        return type;
+    }
 
 
     @Override
@@ -69,11 +82,17 @@ public abstract class Attack implements BattleAction {
     }
 
     public abstract String categoryLabel();
+
     public abstract String effectSummary();
+
     public abstract String powerLabel();
+
     public abstract int minPower();
+
     public abstract int maxPower();
+
     public abstract void updatePower(int newPower);
+
     public abstract Attack scaledCopy(IntUnaryOperator scaler);
 
     @Override

@@ -17,7 +17,8 @@ Ett konsolbaserat Pokémon-spel där man samlar Pokémon i ett Pokédex och slå
 7. [Statistik](#-statistik)
 8. [Felhantering och kraschtest](#-felhantering-och-kraschtest)
 9. [Uppfyllda VG-krav](#-uppfyllda-vg-krav)
-10. [Kända begränsningar / TODO's](#-kända-begränsningar--todos-om-tid-finnes)
+10. [Tester](#-tester)
+11. [Kända begränsningar](#-kända-begränsningar)
 
 ---
 
@@ -335,10 +336,15 @@ Efter varje **avslutad** strid sparas resultatet (avbrutna strider räknas inte)
 
 ---
 
-## ⚠️ Kända begränsningar / TODO's om tid finnes
+## ✅ Tester
+- Enhetstester med JUnit 5. De täcker skadeberäkning (DamageAttack.calculateDamage), statusattacker, validering i Pokemon samt PokedexService med ett repository i minnet (rör aldrig riktiga datafiler).
 
-- Battle-loggen skrivs direkt till konsolen från `Attack.execute` och `BattleEngine`. I en vidareutveckling skulle ett lyssnar-/händelsegränssnitt skilja loggningen från spellogiken och göra den lättare att testa.
-- Slumpen (`Random`) är inte injicerbar i attackklasserna, vilket gör exakta skadevärden svåra att enhetstesta. Inga automatiska enhetstester är skrivna ännu.
+---
+
+## ⚠️ Kända begränsningar
+
+- Battle-loggen skrivs direkt till konsolen från `Attack.execute` och `BattleEngine`. I en vidareutveckling skulle ett lyssnar-/händelsegränssnitt skilja loggningen från spellogiken.
+- Refaktorisering av repositories: Skapa interface för samtliga repositories för att ytterligare förbättra testbarheten och beroendeinjektionen.
 - Raid-läget kräver exakt 5 stridsdugliga Pokémon. Raid-bossar har fasta attacker och kan inte fångas.
 - 5 RAID-bossar är implementerade och man kan inte välja vilken man möter.
 - Manuellt skapade Pokémon får en IV på 0%.

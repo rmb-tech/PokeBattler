@@ -13,7 +13,8 @@ import java.util.Random;
 public final class PokemonDataSeeder {
     private static final Random random = new Random();
 
-    private PokemonDataSeeder(){}
+    private PokemonDataSeeder() {
+    }
 
     private static int applyVariance(int baseValue, double factor) {
         return (int) Math.round(baseValue * factor);

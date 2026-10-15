@@ -70,6 +70,7 @@ public class BattleStats {
     public void setTotalWins(int totalWins) {
         this.totalWins = Math.max(0, totalWins);
     }
+
     @JsonProperty
     public void setTotalLosses(int totalLosses) {
         this.totalLosses = Math.max(0, totalLosses);
