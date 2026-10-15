@@ -156,7 +156,8 @@ public class Pokemon {
                 && maxHp >= MIN_HP && maxHp <= MAX_HP
                 && speed >= MIN_SPEED && speed <= MAX_SPEED
                 && defense >= MIN_DEFENSE && defense <= MAX_DEFENSE
-                && attacks != null && attacks.size() >= MIN_ATTACKS && attacks.size() <= MAX_ATTACKS;
+                && attacks != null && attacks.size() >= MIN_ATTACKS && attacks.size() <= MAX_ATTACKS
+                && attacks.stream().allMatch(a -> a != null && a.getName() != null && a.getType() != null);
     }
 
     public String getId() {

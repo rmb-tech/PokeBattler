@@ -95,7 +95,7 @@ public class BattleEngine {
                 break;
             }
 
-            System.out.printf("%n--- RUNDA %d ---", round);
+            System.out.printf("%n--- RUNDA %d ---%n", round);
 
             if (determineTurnOrder(player, cpu)) {
                 attacksUsed.add(takeTurn(player, cpu, playerChooser).getName());

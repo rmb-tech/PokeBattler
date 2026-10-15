@@ -2,24 +2,24 @@ package se.rmbtech.pokebattler.service;
 
 import se.rmbtech.pokebattler.exception.PokemonNotFoundException;
 import se.rmbtech.pokebattler.model.Pokemon;
-import se.rmbtech.pokebattler.repository.FileManager;
-import se.rmbtech.pokebattler.util.UIHelper;
+import se.rmbtech.pokebattler.repository.PokemonRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class PokedexService {
     private static final int DEFAULT_TEAM_SIZE = 6;
+    private final PokemonRepository repository;
     private List<Pokemon> pokemons = new ArrayList<>();
+
+    public PokedexService(PokemonRepository repository) {
+        this.repository = Objects.requireNonNull(repository, "repository");
+    }
 
     public List<Pokemon> getPokemons() {
         return new ArrayList<>(pokemons);
-    }
-
-    public void setPokemons(List<Pokemon> pokemons) {
-        this.pokemons = (pokemons != null) ? new ArrayList<>(pokemons) : new ArrayList<>();
-        save();
     }
 
     public void addPokemon(Pokemon p) {
@@ -64,19 +64,15 @@ public class PokedexService {
     }
 
     public void save() {
-        FileManager.savePokemons(pokemons);
+        repository.save(pokemons);
     }
 
-    public void loadOrSeedData() {
-        List<Pokemon> loadedData = FileManager.loadPokemons();
+    public boolean loadFromFile() {
+        List<Pokemon> loadedData = repository.load();
         if (loadedData != null && !loadedData.isEmpty()) {
-            UIHelper.simulateLoading("Laddar sparad data från 'pokebattler.json'", 1500);
             this.pokemons = new ArrayList<>(loadedData);
-            System.out.println("Data har laddats framgångsrikt!");
-        } else {
-            UIHelper.simulateLoading("Ingen användbar sparfil hittades. Genererar en starttrupp med 6 slumpade Pokémon", 2000);
-            seedDefaultData();
-            System.out.println("Starttrupp skapad och sparad!");
+            return true;
         }
+        return false;
     }
 }

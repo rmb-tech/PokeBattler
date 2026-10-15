@@ -63,6 +63,7 @@ public class BattleUI {
         BattleEngine engine = new BattleEngine(new PlayerAttackChooser(scanner), new CpuAttackChooser());
         BattleResult result = engine.startBattle(mode, playerTeam, cpuTeam);
         statsService.recordBattle(result);
+        service.save();
         System.out.println("📊 Resultatet har sparats i statistiken.");
     }
 

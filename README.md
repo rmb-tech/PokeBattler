@@ -28,7 +28,7 @@ Ett konsolbaserat Pokémon-spel där man samlar Pokémon i ett Pokédex och slå
 * Redigera namn, typ, Max HP, försvar, snabbhet samt lägga till, ändra och ta bort attacker (1–4 per Pokémon).
 * Fånga en slumpad Pokémon, läka alla Pokémon och återställa till seedat läge.
 * Stat-varians: varje Pokémon som fångas, seedas eller möts som vild får en slumpad faktor mellan 0.80 och 1.20. Samma faktor skalar HP, försvar, snabbhet och attackstyrka (inom giltiga gränser via Math.clamp). 
-* IV: Variantfaktorn blir IV/Potential 0–100 % (0 % = ×0.80, 100 % = ×1.20) som visas som (IV 87%). Manuellt skapade Pokémon har ingen faktor och får IV 0 %."
+* IV: Variantfaktorn blir IV/Potential 0–100 % (0 % = ×0.80, 100 % = ×1.20) som visas som (IV 87%). Manuellt skapade Pokémon har ingen faktor och får IV 0 %.
 * Fullständig validering av alla fält vid skapande och redigering.
 
 ### Strid (nytt i Inlämning 2)
@@ -41,7 +41,7 @@ Ett konsolbaserat Pokémon-spel där man samlar Pokémon i ett Pokédex och slå
 
 ### Statistik
 * Totala vinster och förluster, vinstprocent, resultat per stridstyp, vinst/förlust per Pokémon samt mest använda Pokémon och attack. Sparas mellan sessioner.
-* Unika Pokémon-instanser (UUID): Varje enskild Pokémon tilldelas ett unikt ID vid skapandet. Detta säkerställer att statistik (WinLossRecord) och historik sparas på id istället än enbart på namn
+* Unika Pokémon-instanser (UUID): Varje enskild Pokémon tilldelas ett unikt ID vid skapandet. Statistiken sparas per Pokémon-id `(PokemonRecord)` i stället för på namn.
 
 ### Menyer
 
@@ -92,7 +92,7 @@ Välj Pokémon #1 (#): 2
 1) Ember (Skada: 45, Träff: 100%, Typ: FIRE)
 Välj attack: 1
 Charmander använder Ember!
-💥 Träff! Bulbasaur tog 38 skada! (HP: 87/125) 🔥 Super effektivt!
+💥 Träff! Bulbasaur tog 32 skada! (HP: 93/125) 🔥 Super effektivt!
 ```
 
 ---
@@ -114,11 +114,13 @@ se.rmbtech.pokebattler
 │   ├── BattleStats
 │   ├── DamageAttack
 │   ├── Pokemon
+│   ├── PokemonRecord
 │   ├── PokemonType
 │   ├── StatusAttack
 │   └── WinLossRecord
 ├── repository/
-│   ├── FileManager
+│   ├── JsonPokemonRepository
+│   ├── PokemonRepository (interface)
 │   └── StatsRepository
 ├── service/
 │   ├── AttackChooser (interface)
@@ -332,8 +334,8 @@ Efter varje **avslutad** strid sparas resultatet (avbrutna strider räknas inte)
 * Battle-loggen skrivs direkt till konsolen från `Attack.execute` och `BattleEngine`. I en vidareutveckling skulle ett lyssnar-/händelsegränssnitt skilja loggningen från spellogiken och göra den lättare att testa.
 * Slumpen (`Random`) är inte injicerbar i attackklasserna, vilket gör exakta skadevärden svåra att enhetstesta. Inga automatiska enhetstester är skrivna ännu.
 * Försvaret dras av som ett fast belopp (`försvar / 2`). Mycket svaga attacker mot Pokémon med högt försvar gör därför bara 1 skada.
-* Raid-läget kräver exakt 5 stridsdugliga Pokémon. Raid-bossar har fasta attacker och kan inte fångas.
-* Endast 3 RAID bossar är implementerade. 
+* Raid-läget kräver exakt 5 stridsdugliga Pokémon. Raid-bossar har fasta attacker och kan inte fångas. 
+* 5 RAID bossar är implementerade och man kan inte välja vilken man möter.  
 * Manuellt skapade Pokemon får en IV på 0% 
 * Pokémon läker inte automatiskt mellan strider, utan man läker via Pokédex-menyn.
 * Nivå- och erfarenhetsmekanik (Level-up) är ännu inte implementerat.

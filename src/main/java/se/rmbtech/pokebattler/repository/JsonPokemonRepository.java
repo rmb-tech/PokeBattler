@@ -11,29 +11,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+public class JsonPokemonRepository implements PokemonRepository {
+    private final File file;
+    private final ObjectMapper mapper = new ObjectMapper();
 
-public final class FileManager {
-    private static final String FILE_PATH = "pokebattler.json";
-    private static final ObjectMapper mapper = new ObjectMapper();
+    public JsonPokemonRepository(String path) {
+        this.file = new File(path);
+    }
 
-    private FileManager() {}
-
-    public static void savePokemons(List<Pokemon> pokemons) {
+    @Override
+    public void save(List<Pokemon> pokemons) {
         try {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(FILE_PATH), pokemons);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, pokemons);
         } catch (IOException e) {
             System.out.println("Kunde inte spara till JSON fil: " + e.getMessage());
         }
     }
 
-    public static List<Pokemon> loadPokemons() {
-        File file = new File(FILE_PATH);
+    @Override
+    public List<Pokemon> load() {
         if (!file.exists()) {
             return null;
         }
         try {
-            List<Pokemon> loaded = mapper.readValue(file, new TypeReference<List<Pokemon>>() {
-            });
+            List<Pokemon> loaded = mapper.readValue(file, new TypeReference<List<Pokemon>>() {});
             if (loaded == null) {
                 return null;
             }

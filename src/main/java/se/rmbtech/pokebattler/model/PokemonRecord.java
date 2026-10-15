@@ -20,7 +20,7 @@ public class PokemonRecord extends WinLossRecord {
     }
 
     public void setPotential(int potential) {
-        this.potential = Math.max(0, Math.min(100, potential));
+        this.potential =Math.clamp(potential, Pokemon.MIN_POTENTIAL, Pokemon.MAX_POTENTIAL);
     }
 
     public String displayName() {

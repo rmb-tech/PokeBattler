@@ -80,9 +80,9 @@ public class BattleStats {
     public void setPokemonRecords(Map<String, PokemonRecord> records) {
         pokemonRecords.clear();
         if (records == null) return;
-        records.forEach((name, record) -> {
-            if (name != null && record != null) {
-                pokemonRecords.put(name, record);
+        records.forEach((id, record) -> {
+            if (id != null && record != null) {
+                pokemonRecords.put(id, record);
             }
         });
     }

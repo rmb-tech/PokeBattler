@@ -257,7 +257,7 @@ public class PokedexUI {
             }
 
         } else if (choice == 3) {
-            if (attacks.size() <= 1) {
+            if (attacks.size() <= Pokemon.MIN_ATTACKS) {
                 System.out.println("❌ En Pokémon måste ha minst 1 attack! Det går inte att ta bort den sista.");
                 return;
             }
