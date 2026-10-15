@@ -1,6 +1,7 @@
 package se.rmbtech.pokebattler.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -65,10 +66,11 @@ public class BattleStats {
         return totalLosses;
     }
 
+    @JsonProperty
     public void setTotalWins(int totalWins) {
         this.totalWins = Math.max(0, totalWins);
     }
-
+    @JsonProperty
     public void setTotalLosses(int totalLosses) {
         this.totalLosses = Math.max(0, totalLosses);
     }
@@ -77,6 +79,7 @@ public class BattleStats {
         return Collections.unmodifiableMap(pokemonRecords);
     }
 
+    @JsonProperty
     public void setPokemonRecords(Map<String, PokemonRecord> records) {
         pokemonRecords.clear();
         if (records == null) return;
@@ -91,6 +94,7 @@ public class BattleStats {
         return Collections.unmodifiableMap(modeRecords);
     }
 
+    @JsonProperty
     public void setModeRecords(Map<BattleMode, WinLossRecord> records) {
         modeRecords.clear();
         if (records == null) return;
@@ -101,10 +105,12 @@ public class BattleStats {
         });
     }
 
+    @JsonProperty
     public Map<String, Integer> getAttackUsage() {
         return Collections.unmodifiableMap(attackUsage);
     }
 
+    @JsonProperty
     public void setAttackUsage(Map<String, Integer> usage) {
         attackUsage.clear();
         if (usage == null) return;

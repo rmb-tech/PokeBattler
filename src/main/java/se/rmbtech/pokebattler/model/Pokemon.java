@@ -3,6 +3,7 @@ package se.rmbtech.pokebattler.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import se.rmbtech.pokebattler.exception.InvalidPokemonException;
 
@@ -52,6 +53,7 @@ public class Pokemon {
         setAttacks(attacks);
     }
 
+    @JsonProperty
     public void setId(String id) {
         if (id != null && !id.trim().isEmpty()) {
             this.id = id;
@@ -80,6 +82,7 @@ public class Pokemon {
         this.currentHp = Math.min(this.currentHp, maxHp);
     }
 
+    @JsonProperty
     public void setCurrentHp(int currentHp) {
         this.currentHp = Math.clamp(currentHp, 0, this.maxHp);
     }
