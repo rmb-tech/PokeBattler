@@ -37,17 +37,19 @@ public class DamageAttack extends Attack {
         }
         this.baseDamage = baseDamage;
     }
-
+    @JsonProperty
     public int getBaseDamage() {
         return baseDamage;
     }
 
     public int calculateDamage(Pokemon defender, double typeMultiplier, boolean isCritical) {
-        int blockedDamage = defender.getDefense() / 2;
-        double critMultiplier = isCritical ? CRIT_MULTIPLIER : 1.0;
 
-        long rawDamage = Math.round((baseDamage - blockedDamage) * typeMultiplier * critMultiplier);
-        return Math.max(1, (int) rawDamage);
+        double defenseFactor = 50.0 / (50.0 + defender.getDefense());
+        double mitigatedDamage = this.baseDamage * defenseFactor;
+        double critMultiplier = isCritical ? CRIT_MULTIPLIER : 1.0;
+        double rawDamage = mitigatedDamage * typeMultiplier * critMultiplier;
+
+        return Math.max(1, (int) Math.round(rawDamage));
     }
 
     @Override

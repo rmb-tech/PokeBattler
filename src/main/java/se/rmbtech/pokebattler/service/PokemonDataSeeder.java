@@ -178,7 +178,7 @@ public final class PokemonDataSeeder {
                 new DamageAttack("X-Scissor", 80, 100, PokemonType.BUG)
         )));
 
-        pokemonList.add(createWithVariance("Pinsir", PokemonType.BUG, 130, 85, 85, List.of(
+        pokemonList.add(createWithVariance("Pinsir", PokemonType.BUG, 130, 100, 85, List.of(
                 new DamageAttack("Vice Grip", 55, 100, PokemonType.NORMAL),
                 new DamageAttack("X-Scissor", 80, 100, PokemonType.BUG)
         )));
@@ -229,13 +229,13 @@ public final class PokemonDataSeeder {
                 new DamageAttack("Flash Cannon", 80, 100, PokemonType.STEEL)
         )));
 
-        pokemonList.add(createWithVariance("Skarmory", PokemonType.STEEL, 130, 100, 70, List.of(
+        pokemonList.add(createWithVariance("Skarmory", PokemonType.STEEL, 130, 130, 70, List.of(
                 new DamageAttack("Wing Attack", 60, 100, PokemonType.FLYING),
                 new DamageAttack("Steel Wing", 70, 90, PokemonType.STEEL)
         )));
 
         // --- DARK ---
-        pokemonList.add(createWithVariance("Umbreon", PokemonType.DARK, 190, 90, 65, List.of(
+        pokemonList.add(createWithVariance("Umbreon", PokemonType.DARK, 190, 110, 65, List.of(
                 new DamageAttack("Faint Attack", 60, 100, PokemonType.DARK),
                 new DamageAttack("Dark Pulse", 80, 100, PokemonType.DARK)
         )));

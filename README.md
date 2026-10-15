@@ -24,24 +24,24 @@ Ett konsolbaserat Pokémon-spel där man samlar Pokémon i ett Pokédex och slå
 ## 🎮 Funktioner
 
 ### Pokédex (från Inlämning 1, bevarat och förbättrat)
-* Visa, lägga till, redigera, ta bort och söka Pokémon.
-* Redigera namn, typ, Max HP, försvar, snabbhet samt lägga till, ändra och ta bort attacker (1–4 per Pokémon).
-* Fånga en slumpad Pokémon, läka alla Pokémon och återställa till seedat läge.
-* Stat-varians: varje Pokémon som fångas, seedas eller möts som vild får en slumpad faktor mellan 0.80 och 1.20. Samma faktor skalar HP, försvar, snabbhet och attackstyrka (inom giltiga gränser via Math.clamp). 
-* IV: Variantfaktorn blir IV/Potential 0–100 % (0 % = ×0.80, 100 % = ×1.20) som visas som (IV 87%). Manuellt skapade Pokémon har ingen faktor och får IV 0 %.
-* Fullständig validering av alla fält vid skapande och redigering.
+- Visa, lägga till, redigera, ta bort och söka Pokémon.
+- Redigera namn, typ, Max HP, försvar, snabbhet samt lägga till, ändra och ta bort attacker (1–4 per Pokémon).
+- Fånga en slumpad Pokémon, läka alla Pokémon och återställa till seedat läge.
+- Stat-varians: varje Pokémon som fångas, seedas eller möts som vild får en slumpad faktor mellan 0.80 och 1.20. Samma faktor skalar HP, försvar, snabbhet och attackstyrka (inom giltiga gränser via Math.clamp).
+- Variantfaktorn är IV/Potential 0–100 % (0 % = ×0.80, 100 % = ×1.20) som visas som (IV 87%). Manuellt skapade Pokémon har ingen faktor och får IV 0 %.
+- Fullständig validering av alla fält vid skapande och redigering.
 
 ### Strid (nytt i Inlämning 2)
-* **1v1 Strid:** En av dina Pokémon mot en vild Pokémon.
-* **3v3 Lagstrid:** Tre mot tre, nästa Pokémon skickas ut automatiskt när en svimmar.
-* **RAID (5v1):** Fem av dina Pokémon mot en enda stark Raid-boss.
-* Turordning efter snabbhet. 
-* Träffsäkerhet, typeffektivitet, kritiska träffar och statusattacker.
-* Tydlig battle-logg för varje runda samt slutresultat.
+- **1v1 Strid:** En av dina Pokémon mot en vild Pokémon.
+- **3v3 Lagstrid:** Tre mot tre, nästa Pokémon skickas ut automatiskt när en svimmar.
+- **RAID (5v1):** Fem av dina Pokémon mot en enda stark Raid-boss.
+- Turordning efter snabbhet.
+- Träffsäkerhet, typeffektivitet, kritiska träffar och statusattacker.
+- Tydlig battle-logg för varje runda samt slutresultat.
 
 ### Statistik
-* Totala vinster och förluster, vinstprocent, resultat per stridstyp, vinst/förlust per Pokémon samt mest använda Pokémon och attack. Sparas mellan sessioner.
-* Unika Pokémon-instanser (UUID): Varje enskild Pokémon tilldelas ett unikt ID vid skapandet. Statistiken sparas per Pokémon-id `(PokemonRecord)` i stället för på namn.
+- Totala vinster och förluster, vinstprocent, resultat per stridstyp, vinst/förlust per Pokémon samt mest använda Pokémon och attack. Sparas mellan sessioner.
+- Unika Pokémon-instanser (UUID): Varje enskild Pokémon tilldelas ett unikt ID vid skapandet. Statistiken sparas per Pokémon-id `(PokemonRecord)` i stället för på namn.
 
 ### Menyer
 
@@ -68,15 +68,15 @@ git clone <repo-url>
 cd PokeBattler
 ```
 
-* **I IntelliJ:** öppna projektmappen och kör `se.rmbtech.pokebattler.Main`.
-* **Med Maven från terminalen** (kör i projektets rotmapp, där `pom.xml` ligger):
+- **I IntelliJ:** öppna projektmappen och kör `se.rmbtech.pokebattler.Main`.
+- **Med Maven från terminalen** (kör i projektets rotmapp, där `pom.xml` ligger):
   ```bash
   mvn compile exec:java "-Dexec.mainClass=se.rmbtech.pokebattler.Main"
   ```
 
 ### Bra att veta
-* Datafilerna `pokebattler.json` och `battle-stats.json` skapas automatiskt i den mapp programmet körs från. Första gången (ingen sparfil) genereras sex slumpade Pokémon.
-* Konsolen använder emojis. Terminalen bör stödja UTF-8 (IntelliJ:s Run-fönster fungerar. I Windows cmd kan du köra `chcp 65001` först).
+- Datafilerna `pokebattler.json` och `battle-stats.json` skapas automatiskt i den mapp programmet körs från. Första gången (ingen sparfil) genereras sex slumpade Pokémon.
+- Konsolen använder emojis. Terminalen bör stödja UTF-8 (IntelliJ:s Run-fönster fungerar. I Windows cmd kan du köra `chcp 65001` först).
 
 ### Exempel på användning
 
@@ -158,9 +158,9 @@ DamageAttack                 StatusAttack
 (gör skada)                  (sänker försvar)
 ```
 
-* **`BattleAction`** beskriver bara att förmågan "kan utföras" (`execute`).
-* **`Attack`** är en **abstrakt klass** eftersom alla attacker delar data och validering (namn, träffsäkerhet, typ). Ett interface kan inte bära det delade tillståndet.
-* **Polymorfa metoder:** Varje subklass bestämmer själv sitt beteende, och ingen kod utanför attackklasserna behöver veta vilken subtyp det rör sig om (inga `instanceof`-kedjor):
+- **`BattleAction`** beskriver bara att förmågan "kan utföras" (`execute`).
+- **`Attack`** är en **abstrakt klass** eftersom alla attacker delar data och validering (namn, träffsäkerhet, typ). Ett interface kan inte bära det delade tillståndet.
+- **Polymorfa metoder:** Varje subklass bestämmer själv sitt beteende, och ingen kod utanför attackklasserna behöver veta vilken subtyp det rör sig om (inga `instanceof`-kedjor):
 
 | Metod | `DamageAttack` | `StatusAttack` |
 | :--- | :--- | :--- |
@@ -170,29 +170,25 @@ DamageAttack                 StatusAttack
 | `scaledCopy(scaler)` | skalar basskadan (stat-varians vid seedning) | skalar försvarssänkningen |
 | `updatePower(n)` | sätter basskadan | sätter försvarssänkningen |
 
-
-
 ### Strategimönster: vem väljer attack?
 
 `AttackChooser` är ett interface med två implementationer:
-* **`PlayerAttackChooser`** (UI-lagret) visar en meny och läser spelarens val.
-* **`CpuAttackChooser`** (service-lagret) väljer slumpmässigt bland de attacker som är användbara.
-
-
+- **`PlayerAttackChooser`** (UI-lagret) visar en meny och läser spelarens val.
+- **`CpuAttackChooser`** (service-lagret) väljer slumpmässigt bland de attacker som är användbara.
 
 ### Inkapsling och robusthet
 
-* **Privata fält & validerande settrar:** Alla fält är `private` med validerande settrar som kastar `InvalidPokemonException` direkt (*fail fast*). Ett `Pokemon`- eller `Attack`-objekt kan därför inte hamna i ett ogiltigt tillstånd.
-* **Defensiva kopior:** `Pokemon.getAttacks()` och `PokedexService.getPokemons()` returnerar kopior, och `setAttacks()` kopierar listan in. 
-* **Regler på ett ställe:** Gränsvärden finns som konstanter (`Pokemon.MAX_HP`, `DamageAttack.MIN_DAMAGE` med flera) och används av både validering och menyer.
-* **Stridsstatus vs permanenta värden:** `defense` är värdet under strid och `baseDefense` är det permanenta. Efter varje strid återställs försvaret i `finally`.
+- **Privata fält & validerande settrar:** Alla fält är `private` med validerande settrar som kastar `InvalidPokemonException` direkt (*fail fast*). Ett `Pokemon`- eller `Attack`-objekt kan därför inte hamna i ett ogiltigt tillstånd.
+- **Defensiva kopior:** `Pokemon.getAttacks()` och `PokedexService.getPokemons()` returnerar kopior, och `setAttacks()` kopierar listan in.
+- **Regler på ett ställe:** Gränsvärden finns som konstanter (`Pokemon.MAX_HP`, `DamageAttack.MIN_DAMAGE` med flera) och används av både validering och menyer.
+- **Stridsstatus vs permanenta värden:** `defense` är värdet under strid och `baseDefense` är det permanenta. Efter varje strid återställs försvaret i `finally`.
 
 ### Övriga val
 
-* **`enum PokemonType`** innehåller typeffektivitetstabellen. **`enum BattleMode`** bär sin egen data (etikett, lagstorlek) i stället för `if`-kedjor i gränssnittet.
-* **`record BattleResult`** är ett oföränderligt resultatobjekt. Motorn *returnerar* resultatet och statistiken sparas av `StatsService`, så motorn behöver inte känna till statistik eller filer.
-* **Egna exceptions:** `InvalidPokemonException` (ogiltig data), `PokemonNotFoundException` (ogiltigt index) och `InputCancelledException` (input avbröts, t.ex. Ctrl+D).
-* **Jackson med polymorfism:** `@JsonTypeInfo`/`@JsonSubTypes` på `Attack` gör att rätt subklass läses in från JSON.
+- **`enum PokemonType`** innehåller typeffektivitetstabellen. **`enum BattleMode`** bär sin egen data (etikett, lagstorlek) i stället för `if`-kedjor i gränssnittet.
+- **`record BattleResult`** är ett oföränderligt resultatobjekt. Motorn *returnerar* resultatet och statistiken sparas av `StatsService`, så motorn behöver inte känna till statistik eller filer.
+- **Egna exceptions:** `InvalidPokemonException` (ogiltig data), `PokemonNotFoundException` (ogiltigt index) och `InputCancelledException` (input avbröts, t.ex. Ctrl+D).
+- **Jackson med polymorfism:** `@JsonTypeInfo`/`@JsonSubTypes` på `Attack` gör att rätt subklass läses in från JSON.
 
 ---
 
@@ -206,26 +202,36 @@ Pokémon med högst **snabbhet** attackerar först i varje runda. Vid lika snabb
 
 En attack träffar med sannolikheten `träffsäkerhet`, så en attack med 90 träffar i 90 % av fallen. Missar den skrivs det i loggen.
 
-### Skadeformel
+### Skadeformel & Balansering
+
+För att uppnå en bättre spelbalans och undvika att motståndare med högt försvar ("tanks" som Onix eller Umbreon) helt nollställer inkommande skada, används en **procentuell dämpningsfaktor (diminishing returns)** snarare än en linjär subtraktion.
 
 ```text
-blockedDamage = defense / 2  
-rawDamage     = (baseDamage - blockedDamage) × typeMultiplier × critMultiplier
-finalDamage   = max(1, round(rawDamage))
+defenseFactor   = 50.0 / (50.0 + defender.getDefense())
+mitigatedDamage = baseDamage × defenseFactor
+rawDamage       = mitigatedDamage × typeMultiplier × critMultiplier
+finalDamage     = max(1, round(rawDamage))
 ```
 
 | Del | Förklaring |
 | :--- | :--- |
 | `baseDamage` | Attackens grundskada (5–250) |
 | `defense` | Försvararens aktuella försvar, vilket kan vara sänkt av en statusattack |
+| `defenseFactor` | Procentuell dämpning baserad på motståndarens försvar |
 | `typeMultiplier` | Från typeffektivitetstabellen (se nedan) |
 | `critMultiplier` | 10 % chans för kritisk träff vid träff, då 1.5×, annars 1.0× |
 | `max(1, …)` | En träff gör alltid minst 1 skada |
 
-**Exempel:** Thunderbolt (`baseDamage` 90) mot en Pokémon med försvar 55 av typ Water, utan kritiskträff:
-`(90 − 27) × 1.6 = 100.8`, vilket avrundas till **101 skada**.
+**Exempel:** Thunderbolt (`baseDamage` 90) mot en Pokémon med försvar 55 av typ Water, utan kritisk träff:
+- `defenseFactor = 50.0 / (50.0 + 55) ≈ 0.476`
+- `mitigatedDamage = 90 × 0.476 ≈ 42.84`
+- Med typmultiplikator 1.6: `42.84 × 1.6 = 68.544`, vilket avrundas till **69 skada**.
 
-Slumpfaktorerna i varje attack är alltså träff/miss och kritisk träff. Kritiska träffar visas tydligt i loggen (`🎯 KRITISK TRÄFF!`).
+#### Varför formeln uppdaterades:
+- **Inga flaskhalsar:** Den tidigare linjära subtraktionen (`defense / 2`) gjorde att starka försvarare kapade ner nästan alla attacker till spelets minimigräns (1 i skada), vilket drog ut på duellerna i det oändliga.
+- **Jämnare spelkänsla:** Den nya formeln ger tanks ett välförtjänt och starkt skydd, men tillåter ändå att skadan skalar proportionerligt så att striderna flyter på med bra dynamik.
+
+Slumpfaktorerna i varje attack är träff/miss och kritisk träff. Kritiska träffar visas tydligt i loggen (`🎯 KRITISK TRÄFF!`).
 
 ### Typeffektivitet (värden från Pokémon GO)
 
@@ -238,7 +244,7 @@ Alla 18 typer ingår i tabellen i `PokemonType`. Multiplikatorerna har hämtats 
 | Inte så effektivt | **0.625×** |
 | Dubbel resistens (ersätter immunitet) | **0.390625×** |
 
-Normal är neutral (1×) mot alla typer **utom** Rock och Steel (0.625×) och Ghost (0.390625×), vilket är Pokémon GO:s officiella värden.
+Normal är neutral (1×) mot alla typer **utom** Rock och Steel (0.625×) och Ghost (0.390625×), vilket är Pokémon GO's officiella värden.
 
 ### Statusattacker
 
@@ -250,7 +256,7 @@ En duell får vara högst **30 rundor**. Om ingen svimmat efter det räknas spel
 
 ### RAID-läge
 
-Spelaren väljer **exakt 5** stridsdugliga Pokémon som möter en slumpad Raid-boss (MEGA Mewtwo, MEGA Charizard eller MEGA Tyranitar) med mycket höga stats. Bossen har fasta attacker och ingen stats-varians. Dess HP **bevaras mellan duellerna**, så laget slåss tillsammans mot samma boss. Striden är vunnen när bossen svimmat och förlorad när alla fem svimmat.
+Spelaren väljer **exakt 5** stridsdugliga Pokémon som möter en slumpad Raid-boss med mycket höga stats. Bossen har fasta attacker och ingen stats-varians. Dess HP **bevaras mellan duellerna**, så laget slåss tillsammans mot samma boss. Striden är vunnen när bossen svimmat och förlorad när alla fem svimmat.
 
 ---
 
@@ -279,21 +285,21 @@ Sparas automatiskt efter ändringar i Pokédexet, efter varje strid, vid manuell
 
 ### Tålighet mot dåliga filer
 
-* **Saknad fil:** Pokémon seedas på nytt (6 stycken) och statistiken startar tom.
-* **Korrupt eller oläsbar fil:** Filen döps om till `<filnamn>.bak`, ett felmeddelande visas och programmet startar med nya data.
-* **Ofullständiga Pokémon** (t.ex. utan typ eller attacker) hoppas över med en varning.
+- **Saknad fil:** Pokémon seedas på nytt (6 stycken) och statistiken startar tom.
+- **Korrupt eller oläsbar fil:** Filen döps om till `<filnamn>.bak`, ett felmeddelande visas och programmet startar med nya data.
+- **Ofullständiga Pokémon** (t.ex. utan typ eller attacker) hoppas över med en varning.
 
 ---
 
 ## 📊 Statistik
 
 Efter varje **avslutad** strid sparas resultatet (avbrutna strider räknas inte). Menyval **4. Stridsstatistik** visar:
-* Totalt antal strider, vinster, förluster och vinstprocent.
-* Fördelning per stridstyp (1v1 / 3v3 / RAID).
-* Mest använda Pokémon (flest dueller) och mest använda attack (flest gånger vald av spelaren).
-* Vinst/förlust och vinstprocent per Pokémon.
+- Totalt antal strider, vinster, förluster och vinstprocent.
+- Fördelning per stridstyp (1v1 / 3v3 / RAID).
+- Mest använda Pokémon (flest dueller) och mest använda attack (flest gånger vald av spelaren).
+- Vinst/förlust och vinstprocent per Pokémon.
 
-**Definitioner:** En *duell* är en av dina Pokémon mot en motståndare. En strid består av en eller flera dueller. Statistik per Pokémon räknas per duell. Vid lika antal i "mest använd" väljs den som kommer först i alfabetet. Utan tidigare strider visas ett vänligt meddelande.
+*Definitioner:* En *duell* är en av dina Pokémon mot en motståndare. En strid består av en eller flera dueller. Statistik per Pokémon räknas per duell. Vid lika antal i "mest använd" väljs den som kommer först i alfabetet. Utan tidigare strider visas ett vänligt meddelande.
 
 ---
 
@@ -329,15 +335,14 @@ Efter varje **avslutad** strid sparas resultatet (avbrutna strider räknas inte)
 
 ---
 
-## ⚠️ Kända begränsningar / Todo's om tid finnes
+## ⚠️ Kända begränsningar / TODO's om tid finnes
 
-* Battle-loggen skrivs direkt till konsolen från `Attack.execute` och `BattleEngine`. I en vidareutveckling skulle ett lyssnar-/händelsegränssnitt skilja loggningen från spellogiken och göra den lättare att testa.
-* Slumpen (`Random`) är inte injicerbar i attackklasserna, vilket gör exakta skadevärden svåra att enhetstesta. Inga automatiska enhetstester är skrivna ännu.
-* Försvaret dras av som ett fast belopp (`försvar / 2`). Mycket svaga attacker mot Pokémon med högt försvar gör därför bara 1 skada.
-* Raid-läget kräver exakt 5 stridsdugliga Pokémon. Raid-bossar har fasta attacker och kan inte fångas. 
-* 5 RAID bossar är implementerade och man kan inte välja vilken man möter.  
-* Manuellt skapade Pokemon får en IV på 0% 
-* Pokémon läker inte automatiskt mellan strider, utan man läker via Pokédex-menyn.
-* Nivå- och erfarenhetsmekanik (Level-up) är ännu inte implementerat.
-* Datafilerna sparas relativt arbetsmappen, så programmet bör startas från projektets rotmapp.
-* Gränssnittet är textbaserat och förutsätter en terminal med UTF-8-stöd för emojis.
+- Battle-loggen skrivs direkt till konsolen från `Attack.execute` och `BattleEngine`. I en vidareutveckling skulle ett lyssnar-/händelsegränssnitt skilja loggningen från spellogiken och göra den lättare att testa.
+- Slumpen (`Random`) är inte injicerbar i attackklasserna, vilket gör exakta skadevärden svåra att enhetstesta. Inga automatiska enhetstester är skrivna ännu.
+- Raid-läget kräver exakt 5 stridsdugliga Pokémon. Raid-bossar har fasta attacker och kan inte fångas.
+- 5 RAID-bossar är implementerade och man kan inte välja vilken man möter.
+- Manuellt skapade Pokémon får en IV på 0%.
+- Pokémon läker inte automatiskt mellan strider, utan man kan läka dem via Pokédex-menyn.
+- Nivå- och erfarenhetsmekanik (Level-up) är ännu inte implementerat.
+- Datafilerna sparas relativt arbetsmappen, så programmet bör startas från projektets rotmapp.
+- Gränssnittet är textbaserat och förutsätter en terminal med UTF-8-stöd för emojis.
